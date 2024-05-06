@@ -17,6 +17,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late List<ChartSampleData> _chartData;
   late TrackballBehavior _trackballBehavior;
+  late ZoomPanBehavior _zoomPanBehavior;
   List<ChartSampleData> getChartData() {
     return <ChartSampleData>[
       ChartSampleData(
@@ -331,7 +332,14 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _chartData = getChartData();
     _trackballBehavior = TrackballBehavior(
-        enable: true, activationMode: ActivationMode.singleTap);
+        enable: true, 
+        activationMode: ActivationMode.singleTap);
+    _zoomPanBehavior = ZoomPanBehavior(
+      enableMouseWheelZooming: true, 
+      enablePanning: true,
+      enableSelectionZooming: true,
+      zoomMode: ZoomMode.x,
+      );
     super.initState();
   }
   @override
@@ -349,6 +357,7 @@ class _MyAppState extends State<MyApp> {
               child: SfCartesianChart(
                 title: const ChartTitle(text: "Demo Chart For Ruddu"),
                 trackballBehavior: _trackballBehavior,
+                zoomPanBehavior: _zoomPanBehavior,
                 series: <CandleSeries>[
                   CandleSeries<ChartSampleData, DateTime>(
                       dataSource: _chartData,
