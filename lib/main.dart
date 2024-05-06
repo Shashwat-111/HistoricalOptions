@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/widgets/myAppBar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-//import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -345,41 +345,46 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(),
-        body: Center(
-          child: Container(
-            height: 600,
-            width: 1000,
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: SfCartesianChart(
-                title: const ChartTitle(text: "Demo Chart For Ruddu"),
-                trackballBehavior: _trackballBehavior,
-                zoomPanBehavior: _zoomPanBehavior,
-                series: <CandleSeries>[
-                  CandleSeries<ChartSampleData, DateTime>(
-                      dataSource: _chartData,
-                      name: 'AAPL',
-                      xValueMapper: (ChartSampleData sales, _) => sales.x,
-                      lowValueMapper: (ChartSampleData sales, _) => sales.low,
-                      highValueMapper: (ChartSampleData sales, _) => sales.high,
-                      openValueMapper: (ChartSampleData sales, _) => sales.open,
-                      closeValueMapper: (ChartSampleData sales, _) => sales.close)
-                ],
-                primaryXAxis: DateTimeAxis(
-                  dateFormat: DateFormat.MMM(),
-                  majorGridLines: const MajorGridLines(width: 0),
-                ),
-                primaryYAxis: NumericAxis(
-                  minimum: 70,
-                  maximum: 140,
-                  interval: 10,
-                  numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+      home: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              MyAppBar(),
+              Center(
+                child: Container(
+                  height: 600,
+                  width: 1000,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: SfCartesianChart(
+                      title: const ChartTitle(text: "Demo Chart For Ruddu"),
+                      trackballBehavior: _trackballBehavior,
+                      zoomPanBehavior: _zoomPanBehavior,
+                      series: <CandleSeries>[
+                        CandleSeries<ChartSampleData, DateTime>(
+                            dataSource: _chartData,
+                            name: 'AAPL',
+                            xValueMapper: (ChartSampleData sales, _) => sales.x,
+                            lowValueMapper: (ChartSampleData sales, _) => sales.low,
+                            highValueMapper: (ChartSampleData sales, _) => sales.high,
+                            openValueMapper: (ChartSampleData sales, _) => sales.open,
+                            closeValueMapper: (ChartSampleData sales, _) => sales.close)
+                      ],
+                      primaryXAxis: DateTimeAxis(
+                        dateFormat: DateFormat.MMM(),
+                        majorGridLines: const MajorGridLines(width: 0),
+                      ),
+                      primaryYAxis: NumericAxis(
+                        minimum: 70,
+                        maximum: 140,
+                        interval: 10,
+                        numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
