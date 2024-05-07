@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 
 class MyAppBar extends StatefulWidget {
   const MyAppBar({super.key});
@@ -9,7 +8,7 @@ class MyAppBar extends StatefulWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
-  List <String> items = ["09 May 2024", "15 May 2024", "23 May 2024", "31 May 2024", "07 June 2024", "14 June 2024", "21 June 2024"];
+  List <String> items = ["09 May 2024", "15 May 2024", "23 May 2024", "31 May 2024", "07 June 2024", "14 June 2024", "21 June 2024",];
   String? item;
   @override
   Widget build(BuildContext context) {
