@@ -8,8 +8,30 @@ class MyAppBar extends StatefulWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
-  List <String> items = ["09 May 2024", "15 May 2024", "23 May 2024", "31 May 2024", "07 June 2024", "14 June 2024", "21 June 2024",];
-  String? item;
+  List<String> expiries = [
+    "09 May 2024",
+    "15 May 2024",
+    "23 May 2024",
+    "31 May 2024",
+    "07 June 2024",
+    "14 June 2024",
+    "21 June 2024",
+  ];
+  String? currentExpiry;
+  List<String> indicators = [
+    "Atrr",
+    "BollingerBand",
+    "EMA",
+    "Macd",
+    "Momentum",
+    "RSI",
+    "SMA",
+    "Stochastic",
+    "Technical",
+    "TMA"
+  ];
+  String? currentIndicator;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -49,30 +71,43 @@ class _MyAppBarState extends State<MyAppBar> {
                 ),
               ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
             DropdownButton(
-              focusColor: Colors.white,
-              hint: const Text("Select Expiry"),
-              value: item,
-              items: items.map(buildMenuItems).toList(), 
-              onChanged: (item){
-                setState(() {
-                  this.item= item;
-                });
-              }
-              )
+                focusColor: Colors.white,
+                hint: const Text("Select Expiry"),
+                value: currentExpiry,
+                items: expiries.map(buildMenuItems).toList(),
+                onChanged: (item) {
+                  setState(() {
+                    currentExpiry = item;
+                  });
+                }),
+            const SizedBox(
+              width: 20,
+            ),
+            DropdownButton(
+                focusColor: Colors.white,
+                hint: const Text("Select Indicator"),
+                value: currentIndicator,
+                items: indicators.map(buildMenuItems).toList(),
+                onChanged: (item) {
+                  setState(() {
+                    currentIndicator = item;
+                  });
+                }),
           ],
         ),
       ),
     );
   }
 
-  DropdownMenuItem<String> buildMenuItems (String item) => 
-    DropdownMenuItem(
-      value: item,
-      child: Text(
-        item,
-        style: const TextStyle(fontSize: 12),
-      ),
+  DropdownMenuItem<String> buildMenuItems(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 12),
+        ),
       );
 }

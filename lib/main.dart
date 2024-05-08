@@ -19,11 +19,12 @@ class _MyAppState extends State<MyApp> {
   late List<ChartSampleData> _chartData;
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
+  int chartNumber = 2;
 
  @override
   void initState() {
-    ChartSampleData chartSampleData = ChartSampleData();
-    _chartData = chartSampleData.getChartData();
+    // ChartSampleData chartSampleData = ChartSampleData();
+    // _chartData = chartSampleData.getChartData();
     _trackballBehavior = TrackballBehavior(
         enable: true, 
         activationMode: ActivationMode.singleTap);
@@ -37,6 +38,8 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
+    ChartSampleData chartSampleData = ChartSampleData();
+    _chartData = chartSampleData.getChartData(chartNumber);
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
@@ -72,8 +75,8 @@ class _MyAppState extends State<MyApp> {
                         majorGridLines: const MajorGridLines(width: 0),
                       ),
                       primaryYAxis: NumericAxis(
-                        minimum: 70,
-                        maximum: 140,
+                        // minimum: 70,
+                        // maximum: 140,
                         interval: 10,
                         numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
                       ),
