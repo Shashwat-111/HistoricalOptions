@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/models/graph_data_calss.dart';
+import 'package:fno_view/services/remote_service.dart';
 import 'package:fno_view/widgets/my_appbar.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
@@ -16,30 +18,59 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late List<ChartSampleData> _chartData;
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
   int chartNumber = 2;
+  List<OhlcDatum>? _ohlcDataList;
 
- @override
+  @override
   void initState() {
+    print("hi");
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getData();
+      setState(() {});
+    });
+
     // ChartSampleData chartSampleData = ChartSampleData();
     // _chartData = chartSampleData.getChartData();
     _trackballBehavior = TrackballBehavior(
-        enable: true, 
-        activationMode: ActivationMode.singleTap);
+        enable: true, activationMode: ActivationMode.singleTap);
     _zoomPanBehavior = ZoomPanBehavior(
-      enableMouseWheelZooming: true, 
+      maximumZoomLevel: 0.0001,
+      enableMouseWheelZooming: true,
       enablePanning: true,
       enableSelectionZooming: true,
-      zoomMode: ZoomMode.x,
-      );
+      selectionRectBorderColor: Colors.red,
+      zoomMode: ZoomMode.xy,
+    );
     super.initState();
   }
+
+  getData() async {
+    var shashwat = await RemoteService().getData("/options/1");
+    _ohlcDataList = shashwat!.ohlcData;
+    // if (_ohlcDataList != null) {
+    //   _ohlcDataList.forEach((ohlcData) {
+    //     print("Datetime: ${ohlcData.datetime}");
+    //     print("Open: ${ohlcData.open}");
+    //     print("High: ${ohlcData.high}");
+    //     print("Low: ${ohlcData.low}");
+    //     print("Close: ${ohlcData.close}");
+    //     print("-----------------------");
+    //   });
+    // }
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
-    ChartSampleData chartSampleData = ChartSampleData();
-    _chartData = chartSampleData.getChartData(chartNumber);
+    print("inside build");
+    //ChartSampleData chartSampleData = ChartSampleData();
+    //_chartData = chartSampleData.getChartData(chartNumber);
+    while(_ohlcDataList == null) 
+    {
+      return MaterialApp(home: Scaffold(appBar:AppBar() , body: const Center(child: CircularProgressIndicator(),),),);
+    }
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
@@ -58,27 +89,36 @@ class _MyAppState extends State<MyApp> {
                       title: const ChartTitle(text: "Demo Chart For Ruddu"),
                       trackballBehavior: _trackballBehavior,
                       zoomPanBehavior: _zoomPanBehavior,
+                      
                       series: <CandleSeries>[
-                        CandleSeries<ChartSampleData, DateTime>(
+                        CandleSeries<OhlcDatum, DateTime>(
                             enableSolidCandles: true,
                             animationDuration: 300,
-                            dataSource: _chartData,
+                            dataSource: _ohlcDataList,
                             name: 'AAPL',
-                            xValueMapper: (ChartSampleData sales, _) => sales.x,
-                            lowValueMapper: (ChartSampleData sales, _) => sales.low,
-                            highValueMapper: (ChartSampleData sales, _) => sales.high,
-                            openValueMapper: (ChartSampleData sales, _) => sales.open,
-                            closeValueMapper: (ChartSampleData sales, _) => sales.close)
+                            xValueMapper: (OhlcDatum sales, _) =>
+                                sales.datetime,
+                            lowValueMapper: (OhlcDatum sales, _) =>
+                                double.parse(sales.low),
+                            highValueMapper: (OhlcDatum sales, _) =>
+                                double.parse(sales.high),
+                            openValueMapper: (OhlcDatum sales, _) =>
+                                double.parse(sales.open),
+                            closeValueMapper: (OhlcDatum sales, _) =>
+                                double.parse(sales.close))
                       ],
-                      primaryXAxis: DateTimeAxis(
-                        dateFormat: DateFormat.MMM(),
-                        majorGridLines: const MajorGridLines(width: 0),
+                      primaryXAxis: const DateTimeAxis(
+                        // initialZoomPosition: 0.01,
+                        // initialZoomFactor: 0.01,
+                        //dateFormat: DateFormat.MMM(),
+                        majorGridLines: MajorGridLines(width: 0),
                       ),
                       primaryYAxis: NumericAxis(
                         // minimum: 70,
                         // maximum: 140,
-                        interval: 10,
-                        numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+                       // interval: ,
+                        numberFormat:
+                            NumberFormat.simpleCurrency(decimalDigits: 0),
                       ),
                     ),
                   ),
@@ -91,5 +131,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
