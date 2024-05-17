@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 
 
 class RemoteService {
-  Future<OptionsData?> getData(String A ) async {
+  Future<OptionsData?> getData(String chartNumber ) async {
     var client = http.Client();
-    var uri = Uri.parse('https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io$A');
+    var uri = Uri.parse('https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io$chartNumber');
     var response = await client.get(uri);
     //print(response.body);
     if(response.statusCode == 200)
