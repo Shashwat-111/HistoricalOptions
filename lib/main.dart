@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fno_view/views/pages/mainGraph.dart';
+import 'package:fno_view/views/pages/main_graph.dart';
 import 'package:fno_view/views/widgets/my_appbar.dart';
 
 
@@ -18,10 +17,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print("inside 1st build");
-    }
     return const MaterialApp(
+      title: "Options View",
       home: SafeArea(
         child: Scaffold(
           body: Column(
@@ -29,16 +26,7 @@ class _MyAppState extends State<MyApp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MyAppBar(),
-              SizedBox(
-                child: SizedBox(
-                  height: 600,
-                  width: 1000,
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: MainChart(),
-                  ),
-                ),
-              ),
+              MainChart()
             ],
           ),
         ),
