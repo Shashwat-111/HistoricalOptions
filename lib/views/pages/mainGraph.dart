@@ -47,41 +47,44 @@ class _MainChartState extends State<MainChart> {
 
   @override
   Widget build(BuildContext context) {
-    while (_ohlcDataList == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return SfCartesianChart(
-      crosshairBehavior: CrosshairBehavior(
-          shouldAlwaysShow: true, activationMode: ActivationMode.singleTap),
-      title: const ChartTitle(text: "Demo Chart For Ruddu"),
-      trackballBehavior: _trackballBehavior,
-      zoomPanBehavior: _zoomPanBehavior,
-      series: <CandleSeries>[
-        CandleSeries<OhlcDatum, DateTime>(
-            enableSolidCandles: true,
-            animationDuration: 0,
-            dataSource: _ohlcDataList,
-            name: 'AAPL',
-            xValueMapper: (OhlcDatum sales, _) => sales.datetime,
-            lowValueMapper: (OhlcDatum sales, _) => double.parse(sales.low),
-            highValueMapper: (OhlcDatum sales, _) => double.parse(sales.high),
-            openValueMapper: (OhlcDatum sales, _) => double.parse(sales.open),
-            closeValueMapper: (OhlcDatum sales, _) => double.parse(sales.close))
-      ],
-      primaryXAxis: const DateTimeCategoryAxis(
-        initialZoomPosition: 1,
-        interactiveTooltip: InteractiveTooltip(),
-        initialZoomFactor: 0.05,
-        intervalType: DateTimeIntervalType.minutes,
-        //dateFormat: DateFormat.MMM(),
-        majorGridLines: MajorGridLines(width: 0),
-      ),
-      primaryYAxis: NumericAxis(
-        // minimum: 70,
-        // maximum: 140,
-        //interval:,
-        numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
-      ),
+ 
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _ohlcDataList == null ? const CircularProgressIndicator() : Container(),
+        SfCartesianChart(
+        crosshairBehavior: CrosshairBehavior(
+            shouldAlwaysShow: true, activationMode: ActivationMode.singleTap),
+        title: const ChartTitle(text: "Demo Chart For Ruddu"),
+        trackballBehavior: _trackballBehavior,
+        zoomPanBehavior: _zoomPanBehavior,
+        series: <CandleSeries>[
+          CandleSeries<OhlcDatum, DateTime>(
+              enableSolidCandles: true,
+              animationDuration: 0,
+              dataSource: _ohlcDataList,
+              name: 'AAPL',
+              xValueMapper: (OhlcDatum sales, _) => sales.datetime,
+              lowValueMapper: (OhlcDatum sales, _) => double.parse(sales.low),
+              highValueMapper: (OhlcDatum sales, _) => double.parse(sales.high),
+              openValueMapper: (OhlcDatum sales, _) => double.parse(sales.open),
+              closeValueMapper: (OhlcDatum sales, _) => double.parse(sales.close))
+        ],
+        primaryXAxis: const DateTimeCategoryAxis(
+          initialZoomPosition: 1,
+          interactiveTooltip: InteractiveTooltip(),
+          initialZoomFactor: 0.05,
+          intervalType: DateTimeIntervalType.minutes,
+          //dateFormat: DateFormat.MMM(),
+          majorGridLines: MajorGridLines(width: 0),
+        ),
+        primaryYAxis: NumericAxis(
+          // minimum: 70,
+          // maximum: 140,
+          //interval:,
+          numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+        ),
+      ),]
     );
   }
 }
