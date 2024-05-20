@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/controllers/option_controller.dart';
 import 'package:fno_view/models/graph_data_calss.dart';
-import 'package:fno_view/services/remote_service.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -13,26 +14,23 @@ class MainChart extends StatefulWidget {
 }
 
 class _MainChartState extends State<MainChart> {
+  OptionDataController odController = Get.put(OptionDataController());
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
   late CrosshairBehavior _crosshairBehavior;
-  List<OhlcDatum>? _ohlcDataList;
-  
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getData();
-      setState(() {});
-    });
-    
     _crosshairBehavior = CrosshairBehavior(
-                enable: true,
-                shouldAlwaysShow: true,
-                lineType: CrosshairLineType.horizontal,
-                activationMode: ActivationMode.singleTap);
+      enable: true,
+      shouldAlwaysShow: true,
+      lineType: CrosshairLineType.horizontal,
+      activationMode: ActivationMode.singleTap,
+    );
     _trackballBehavior = TrackballBehavior(
-        enable: true, activationMode: ActivationMode.singleTap);
+      enable: true,
+      activationMode: ActivationMode.singleTap,
+    );
     _zoomPanBehavior = ZoomPanBehavior(
       maximumZoomLevel: 0.001,
       enableMouseWheelZooming: true,
@@ -44,58 +42,53 @@ class _MainChartState extends State<MainChart> {
     super.initState();
   }
 
-  getData() async {
-    var response = await RemoteService().getData("/options/2");
-    _ohlcDataList = response!.ohlcData;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Stack(alignment: Alignment.center, children: [
-          _ohlcDataList == null
-              ? const CircularProgressIndicator()
-              : Container(),
-          SfCartesianChart(
-            crosshairBehavior: _crosshairBehavior,
-            title: const ChartTitle(text: "Demo Chart For Ruddu"),
-            trackballBehavior: _trackballBehavior,
-            zoomPanBehavior: _zoomPanBehavior,
-            series: <CandleSeries>[
-              CandleSeries<OhlcDatum, DateTime>(
+    return Obx(
+      () {
+        // Check if the data list is null or empty and show a progress indicator
+        if (odController.ohlcDataList.isEmpty) {
+          return const Expanded(child: Center(child: CircularProgressIndicator()));
+        }
+
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: SfCartesianChart(
+              crosshairBehavior: _crosshairBehavior,
+              title: ChartTitle(
+                text: "${odController.stockCode.value} | ${odController.expiryDate.value} | ${odController.strikePrice}",
+                alignment: ChartAlignment.near
+                ),
+              trackballBehavior: _trackballBehavior,
+              zoomPanBehavior: _zoomPanBehavior,
+              series: <CandleSeries>[
+                CandleSeries<OhlcDatum, DateTime>(
                   enableSolidCandles: true,
                   animationDuration: 0,
-                  dataSource: _ohlcDataList,
+                  dataSource: odController.ohlcDataList,
                   name: 'AAPL',
                   xValueMapper: (OhlcDatum sales, _) => sales.datetime,
-                  lowValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.low),
-                  highValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.high),
-                  openValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.open),
-                  closeValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.close))
-            ],
-            primaryXAxis: const DateTimeCategoryAxis(
-              initialZoomPosition: 1,
-              interactiveTooltip: InteractiveTooltip(),
-              initialZoomFactor: 0.05,
-              intervalType: DateTimeIntervalType.auto,
-              //dateFormat: DateFormat.MMM(),
-              majorGridLines: MajorGridLines(width: 0),
-            ),
-            primaryYAxis: NumericAxis(
-              // minimum: 70,
-              // maximum: 140,
-              //interval:1,
-              numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+                  lowValueMapper: (OhlcDatum sales, _) => double.parse(sales.low),
+                  highValueMapper: (OhlcDatum sales, _) => double.parse(sales.high),
+                  openValueMapper: (OhlcDatum sales, _) => double.parse(sales.open),
+                  closeValueMapper: (OhlcDatum sales, _) => double.parse(sales.close),
+                ),
+              ],
+              primaryXAxis: const DateTimeCategoryAxis(
+                initialZoomPosition: 1,
+                interactiveTooltip: InteractiveTooltip(),
+                initialZoomFactor: 0.05,
+                intervalType: DateTimeIntervalType.auto,
+                majorGridLines: MajorGridLines(width: 0),
+              ),
+              primaryYAxis: NumericAxis(
+                numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+              ),
             ),
           ),
-        ]),
-      ),
+        );
+      },
     );
   }
 }
