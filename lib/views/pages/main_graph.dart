@@ -15,7 +15,9 @@ class MainChart extends StatefulWidget {
 class _MainChartState extends State<MainChart> {
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
+  late CrosshairBehavior _crosshairBehavior;
   List<OhlcDatum>? _ohlcDataList;
+  
 
   @override
   void initState() {
@@ -23,7 +25,12 @@ class _MainChartState extends State<MainChart> {
       await getData();
       setState(() {});
     });
-
+    
+    _crosshairBehavior = CrosshairBehavior(
+                enable: true,
+                shouldAlwaysShow: true,
+                lineType: CrosshairLineType.horizontal,
+                activationMode: ActivationMode.singleTap);
     _trackballBehavior = TrackballBehavior(
         enable: true, activationMode: ActivationMode.singleTap);
     _zoomPanBehavior = ZoomPanBehavior(
@@ -52,9 +59,7 @@ class _MainChartState extends State<MainChart> {
               ? const CircularProgressIndicator()
               : Container(),
           SfCartesianChart(
-            crosshairBehavior: CrosshairBehavior(
-                shouldAlwaysShow: true,
-                activationMode: ActivationMode.singleTap),
+            crosshairBehavior: _crosshairBehavior,
             title: const ChartTitle(text: "Demo Chart For Ruddu"),
             trackballBehavior: _trackballBehavior,
             zoomPanBehavior: _zoomPanBehavior,
