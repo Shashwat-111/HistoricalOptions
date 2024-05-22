@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:fno_view/controllers/option_controller.dart";
+import "package:get/get.dart";
 
 class MyAppBar extends StatefulWidget {
   const MyAppBar({super.key});
@@ -8,29 +10,22 @@ class MyAppBar extends StatefulWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
-  List<String> expiries = [
-    "09 May 2024",
-    "15 May 2024",
-    "23 May 2024",
-    "31 May 2024",
-    "07 June 2024",
-    "14 June 2024",
-    "21 June 2024",
-  ];
+  OptionDataController odController = Get.put(OptionDataController());
   String? currentExpiry;
-  List<String> indicators = [
-    "Atrr",
-    "BollingerBand",
-    "EMA",
-    "Macd",
-    "Momentum",
-    "RSI",
-    "SMA",
-    "Stochastic",
-    "Technical",
-    "TMA"
-  ];
-  String? currentIndicator;
+  String? currentStrike;
+  // List<String> indicators = [
+  //   "Atrr",
+  //   "BollingerBand",
+  //   "EMA",
+  //   "Macd",
+  //   "Momentum",
+  //   "RSI",
+  //   "SMA",
+  //   "Stochastic",
+  //   "Technical",
+  //   "TMA"
+  // ];
+  //String? currentIndicator;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,7 @@ class _MyAppBarState extends State<MyAppBar> {
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             const Text("BANKNIFTY"),
             const SizedBox(
-              width: 10,
+              width: 15,
             ),
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -74,29 +69,45 @@ class _MyAppBarState extends State<MyAppBar> {
             const SizedBox(
               width: 20,
             ),
-            DropdownButton(
-                focusColor: Colors.white,
-                hint: const Text("Select Expiry"),
-                value: currentExpiry,
-                items: expiries.map(buildMenuItems).toList(),
-                onChanged: (item) {
-                  setState(() {
-                    currentExpiry = item;
-                  });
-                }),
+            Obx(
+              () => DropdownButton(
+                  focusColor: Colors.white,
+                  hint: const Text("Select Expiry"),
+                  value: currentExpiry,
+                  items: odController.expiryDates.map(buildMenuItems).toList(),
+                  onChanged: (item) {
+                    setState(() {
+                      currentExpiry = item;
+                    });
+                  }),
+            ),
+            const SizedBox(width: 20,),
+            Obx(
+              () => DropdownButton(
+                  focusColor: Colors.white,
+                  hint: const Text("Strike Price"),
+                  value: currentStrike,
+                  items: odController.strikePriceList.map(buildMenuItems).toList(),
+                  onChanged: (item) {
+                    setState(() {
+                      currentStrike = item;
+                    });
+                  }),
+            ),
             const SizedBox(
               width: 20,
             ),
-            DropdownButton(
-                focusColor: Colors.white,
-                hint: const Text("Select Indicator"),
-                value: currentIndicator,
-                items: indicators.map(buildMenuItems).toList(),
-                onChanged: (item) {
-                  setState(() {
-                    currentIndicator = item;
-                  });
-                }),
+            // Indicator Dropdown currently commented
+            // DropdownButton(
+            //     focusColor: Colors.white,
+            //     hint: const Text("Select Indicator"),
+            //     value: currentIndicator,
+            //     items: indicators.map(buildMenuItems).toList(),
+            //     onChanged: (item) {
+            //       setState(() {
+            //         currentIndicator = item;
+            //       });
+            //     }),
           ],
         ),
       ),

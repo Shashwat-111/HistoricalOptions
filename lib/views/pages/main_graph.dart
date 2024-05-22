@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/option_controller.dart';
 import 'package:fno_view/models/graph_data_calss.dart';
@@ -48,18 +49,21 @@ class _MainChartState extends State<MainChart> {
       () {
         // Check if the data list is null or empty and show a progress indicator
         if (odController.ohlcDataList.isEmpty) {
-          return const Expanded(child: Center(child: CircularProgressIndicator()));
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
         }
-
+        if (kDebugMode) {
+          print("The no. of candles is : ${odController.ohlcDataList.length}");
+        }
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: SfCartesianChart(
               crosshairBehavior: _crosshairBehavior,
               title: ChartTitle(
-                text: "${odController.stockCode.value} | ${odController.expiryDate.value} | ${odController.strikePrice}",
-                alignment: ChartAlignment.near
-                ),
+                  text:
+                      "${odController.stockCode.value} | ${odController.expiryDate.value} | ${odController.strikePrice}",
+                  alignment: ChartAlignment.near),
               trackballBehavior: _trackballBehavior,
               zoomPanBehavior: _zoomPanBehavior,
               series: <CandleSeries>[
@@ -69,18 +73,23 @@ class _MainChartState extends State<MainChart> {
                   dataSource: odController.ohlcDataList,
                   name: 'AAPL',
                   xValueMapper: (OhlcDatum sales, _) => sales.datetime,
-                  lowValueMapper: (OhlcDatum sales, _) => double.parse(sales.low),
-                  highValueMapper: (OhlcDatum sales, _) => double.parse(sales.high),
-                  openValueMapper: (OhlcDatum sales, _) => double.parse(sales.open),
-                  closeValueMapper: (OhlcDatum sales, _) => double.parse(sales.close),
+                  lowValueMapper: (OhlcDatum sales, _) =>
+                      double.parse(sales.low),
+                  highValueMapper: (OhlcDatum sales, _) =>
+                      double.parse(sales.high),
+                  openValueMapper: (OhlcDatum sales, _) =>
+                      double.parse(sales.open),
+                  closeValueMapper: (OhlcDatum sales, _) =>
+                      double.parse(sales.close),
                 ),
               ],
-              primaryXAxis: const DateTimeCategoryAxis(
+              primaryXAxis: DateTimeCategoryAxis(
                 initialZoomPosition: 1,
-                interactiveTooltip: InteractiveTooltip(),
+                interactiveTooltip: const InteractiveTooltip(),
                 initialZoomFactor: 0.05,
                 intervalType: DateTimeIntervalType.auto,
-                majorGridLines: MajorGridLines(width: 0),
+                dateFormat: DateFormat.yMMMEd().add_jm(),
+                majorGridLines: const MajorGridLines(width: 0),
               ),
               primaryYAxis: NumericAxis(
                 numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
