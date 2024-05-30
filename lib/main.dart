@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MyAppBar(),
-              MainChart()
+              MainChart(),
             ],
           ),
         ),

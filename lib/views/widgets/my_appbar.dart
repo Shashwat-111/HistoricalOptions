@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:fno_view/controllers/option_controller.dart";
 import "package:get/get.dart";
+import "package:get/get_state_manager/get_state_manager.dart";
 
 class MyAppBar extends StatefulWidget {
   const MyAppBar({super.key});
@@ -47,24 +48,20 @@ class _MyAppBarState extends State<MyAppBar> {
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             const Text("BANKNIFTY"),
             const SizedBox(
-              width: 15,
+              width: 20,
             ),
-            ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2)),
-                child: const Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.candlestick_chart),
-                      Text("1m  3m  5m ")
-                    ],
-                  ),
-                ),
-              ),
+            Obx(
+              () => SegmentedButton(
+                  showSelectedIcon: false,
+                  segments: const [
+                    ButtonSegment(value: "1m", label: Text("1m")),
+                    ButtonSegment(value: "5m", label: Text("5m")),
+                    ButtonSegment(value: "15m", label: Text("15m"))
+                  ],
+                  selected: odController.selectedCandleTimeFrame,
+                  onSelectionChanged: (value) {
+                    odController.updateCandleTimeFrame(value);
+                  }),
             ),
             const SizedBox(
               width: 20,
@@ -78,24 +75,70 @@ class _MyAppBarState extends State<MyAppBar> {
                   onChanged: (item) {
                     setState(() {
                       currentExpiry = item;
-                    });
-                  }),
-            ),
-            const SizedBox(width: 20,),
-            Obx(
-              () => DropdownButton(
-                  focusColor: Colors.white,
-                  hint: const Text("Strike Price"),
-                  value: currentStrike,
-                  items: odController.strikePriceList.map(buildMenuItems).toList(),
-                  onChanged: (item) {
-                    setState(() {
-                      currentStrike = item;
+                      if (currentExpiry != null){
+                        print(odController.selectedRight.first);
+                        odController.getStrikePriceData(expiry: currentExpiry!, right: odController.selectedRight.first);
+                        currentStrike = null;
+                      }
+
+                    
                     });
                   }),
             ),
             const SizedBox(
               width: 20,
+            ),
+            Obx(
+              ()=> SegmentedButton(
+                  showSelectedIcon: false,
+                  segments: const [
+                    ButtonSegment(value: "call", label: Text("call")),
+                    ButtonSegment(value: "put", label: Text("put")),
+                  ],
+                  selected: odController.selectedRight,
+                  onSelectionChanged: (value) {
+                    odController.updateRight(value);
+                    if (currentExpiry != null) {
+                      odController.getStrikePriceData(expiry: currentExpiry!, right: odController.selectedRight.first);
+                      setState(() {
+                        currentStrike = null;
+                      });
+                      
+                    }
+                  }
+                  ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Obx(
+              () => DropdownButton(
+                  focusColor: Colors.white,
+                  hint: const Text("Strike Price"),
+                  value: currentStrike,
+                  items:
+                      odController.strikePriceList.map(buildMenuItems).toList(),
+                  onChanged: (item) {
+                    setState(() {
+                      currentStrike = item;
+                      if(currentStrike != null) {
+                        odController.setStrikeprice(item!);
+                      }
+                    });
+                  }),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Obx(
+              () => TextButton(
+                  onPressed: () { 
+                    if(currentExpiry != null && currentStrike != null)
+                    {
+                    odController.getData(expiry: currentExpiry!, right: odController.selectedRight.first, strike: currentStrike!);
+                    }
+                  },
+                  child: Text("Update${odController.temp}")),
             ),
             // Indicator Dropdown currently commented
             // DropdownButton(

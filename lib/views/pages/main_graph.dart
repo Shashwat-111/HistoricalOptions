@@ -5,6 +5,7 @@ import 'package:fno_view/models/graph_data_calss.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:collection/collection.dart';
 
 class MainChart extends StatefulWidget {
   const MainChart({
@@ -19,6 +20,8 @@ class _MainChartState extends State<MainChart> {
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
   late CrosshairBehavior _crosshairBehavior;
+
+  late List<OhlcDatum> _initialData;
 
   @override
   void initState() {
@@ -54,6 +57,10 @@ class _MainChartState extends State<MainChart> {
         }
         if (kDebugMode) {
           print("The no. of candles is : ${odController.ohlcDataList.length}");
+          _initialData = odController.ohlcDataList;
+          //.slices(1000).toList()[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
+          print(_initialData.length);   
+          //print(_initialData);
         }
         return Expanded(
           child: Padding(
@@ -62,15 +69,15 @@ class _MainChartState extends State<MainChart> {
               crosshairBehavior: _crosshairBehavior,
               title: ChartTitle(
                   text:
-                      "${odController.stockCode.value} | ${odController.expiryDate.value} | ${odController.strikePrice}",
+                      "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
                   alignment: ChartAlignment.near),
               trackballBehavior: _trackballBehavior,
               zoomPanBehavior: _zoomPanBehavior,
               series: <CandleSeries>[
                 CandleSeries<OhlcDatum, DateTime>(
-                  enableSolidCandles: true,
+                  //enableSolidCandles: true,
                   animationDuration: 0,
-                  dataSource: odController.ohlcDataList,
+                  dataSource: _initialData,
                   name: 'AAPL',
                   xValueMapper: (OhlcDatum sales, _) => sales.datetime,
                   lowValueMapper: (OhlcDatum sales, _) =>
@@ -84,11 +91,11 @@ class _MainChartState extends State<MainChart> {
                 ),
               ],
               primaryXAxis: DateTimeCategoryAxis(
-                initialZoomPosition: 1,
+                initialZoomPosition: 0.5,
                 interactiveTooltip: const InteractiveTooltip(),
-                initialZoomFactor: 0.05,
+                initialZoomFactor: 0.5,
                 intervalType: DateTimeIntervalType.auto,
-                dateFormat: DateFormat.yMMMEd().add_jm(),
+                dateFormat: DateFormat.yMMM().add_jm(),
                 majorGridLines: const MajorGridLines(width: 0),
               ),
               primaryYAxis: NumericAxis(
@@ -100,4 +107,8 @@ class _MainChartState extends State<MainChart> {
       },
     );
   }
+
 }
+
+
+

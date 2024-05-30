@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final optionsData = optionsDataFromJson(jsonString);
+//     final optionData = optionDataFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -9,93 +9,85 @@ OptionsData optionsDataFromJson(String str) => OptionsData.fromJson(json.decode(
 String optionsDataToJson(OptionsData data) => json.encode(data.toJson());
 
 class OptionsData {
-    String stockCode;
     String exchangeCode;
-    String productType;
     String expiryDate;
-    String strikePrice;
-    String right;
-    String? globalHighest;
-    String? globalLowest;
     List<OhlcDatum> ohlcData;
+    String productType;
+    String right;
+    String stockCode;
+    int strikePrice;
 
     OptionsData({
-        required this.stockCode,
         required this.exchangeCode,
-        required this.productType,
         required this.expiryDate,
-        required this.strikePrice,
-        required this.right,
-        this.globalHighest,
-        this.globalLowest,
         required this.ohlcData,
+        required this.productType,
+        required this.right,
+        required this.stockCode,
+        required this.strikePrice,
     });
 
     factory OptionsData.fromJson(Map<String, dynamic> json) => OptionsData(
-        stockCode: json["stock_code"],
         exchangeCode: json["exchange_code"],
-        productType: json["product_type"],
         expiryDate: json["expiry_date"],
-        strikePrice: json["strike_price"],
-        right: json["right"],
-        globalHighest: json["global_highest"],
-        globalLowest: json["global_lowest"],
         ohlcData: List<OhlcDatum>.from(json["ohlc_data"].map((x) => OhlcDatum.fromJson(x))),
+        productType: json["product_type"],
+        right: json["right"],
+        stockCode: json["stock_code"],
+        strikePrice: json["strike_price"],
     );
 
     Map<String, dynamic> toJson() => {
-        "stock_code": stockCode,
         "exchange_code": exchangeCode,
-        "product_type": productType,
         "expiry_date": expiryDate,
-        "strike_price": strikePrice,
-        "right": right,
-        "global_highest": globalHighest,
-        "global_lowest": globalLowest,
         "ohlc_data": List<dynamic>.from(ohlcData.map((x) => x.toJson())),
+        "product_type": productType,
+        "right": right,
+        "stock_code": stockCode,
+        "strike_price": strikePrice,
     };
 }
 
 class OhlcDatum {
+    String close;
+    int count;
     DateTime datetime;
-    String open;
     String high;
     String low;
-    String close;
-    String? volume;
-    String? openInterest;
-    int? count;
+    String open;
+    int openInterest;
+    int volume;
 
     OhlcDatum({
+        required this.close,
+        required this.count,
         required this.datetime,
-        required this.open,
         required this.high,
         required this.low,
-        required this.close,
-        this.volume,
-        this.openInterest,
-        this.count,
+        required this.open,
+        required this.openInterest,
+        required this.volume,
     });
 
     factory OhlcDatum.fromJson(Map<String, dynamic> json) => OhlcDatum(
+        close: json["close"],
+        count: json["count"],
         datetime: DateTime.parse(json["datetime"]),
-        open: json["open"],
         high: json["high"],
         low: json["low"],
-        close: json["close"],
-        volume: json["volume"],
+        open: json["open"],
         openInterest: json["open_interest"],
-        count: json["count"],
+        volume: json["volume"],
     );
 
     Map<String, dynamic> toJson() => {
+        "close": close,
+        "count": count,
         "datetime": datetime.toIso8601String(),
-        "open": open,
         "high": high,
         "low": low,
-        "close": close,
-        "volume": volume,
+        "open": open,
         "open_interest": openInterest,
-        "count": count,
+        "volume": volume,
     };
 }

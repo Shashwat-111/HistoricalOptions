@@ -7,9 +7,10 @@ import 'package:http/http.dart' as http;
 class RemoteService {
 
 
-  Future<OptionsData?> getFullData(String chartNumber ) async {
+  Future<OptionsData?> getFullData(String chartDetails ) async {
     var client = http.Client();
-    var uri = Uri.parse('https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io$chartNumber');
+    var uri = Uri.parse('https://hardy-antonym-424411-h8.el.r.appspot.com/api/price?$chartDetails');
+    print("https://hardy-antonym-424411-h8.el.r.appspot.com/api/price?$chartDetails");
     var response = await client.get(uri);
     //print(response.body);
     if(response.statusCode == 200)
@@ -22,7 +23,7 @@ class RemoteService {
 
   Future<List<ExpiryData>> getExpiryData() async {
     var client = http.Client();
-    var uri = Uri.parse('https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io/stkcode');
+    var uri = Uri.parse('https://hardy-antonym-424411-h8.el.r.appspot.com/api/expiries');
     var response2 = await client.get(uri);
     if(response2.statusCode == 200)
     {
@@ -32,9 +33,9 @@ class RemoteService {
     return [];
   }
 
-  Future<List<StrikesData>> getStrikePriceList () async {
+  Future<List<StrikesData>> getStrikePriceList (String expiry, String right) async {
       var client = http.Client();
-      var uri = Uri.parse('https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io/strikePriceList');
+      var uri = Uri.parse('https://hardy-antonym-424411-h8.el.r.appspot.com/api/strikes?expiry=$expiry&right0=$right');
       var response3 = await client.get(uri);
       if(response3.statusCode == 200)
     {
