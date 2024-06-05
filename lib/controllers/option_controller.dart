@@ -46,10 +46,19 @@ class OptionDataController extends GetxController {
   void getData({required String expiry, required String right, required String strike}) async {
     isLoading.value = true;
     var response = await RemoteService().getFullData("expiry=$expiry&right1=$right&strike=$strike");
-    ohlcDataList.value = response!.ohlcData;
-    stockCode.value = response.stockCode;
-    expiryDate.value = response.expiryDate;
-    strikePrice.value = response.strikePrice;
+    if (response!=null)
+      {
+        ohlcDataList.value = response.ohlcData;
+        stockCode.value = response.stockCode;
+        expiryDate.value = response.expiryDate;
+        strikePrice.value = response.strikePrice;
+      }
+    else {
+      ohlcDataList.value = <OhlcDatum>[];
+      stockCode.value = "N/A";
+      expiryDate.value = "N/A";
+      strikePrice.value = 0000;
+    }
     isLoading.value = false;
   }
 

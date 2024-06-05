@@ -91,9 +91,9 @@ class _MainChartState extends State<MainChart> {
                 ),
               ],
               primaryXAxis: DateTimeCategoryAxis(
-                initialZoomPosition: 0.5,
+                initialZoomPosition: 1,
                 interactiveTooltip: const InteractiveTooltip(),
-                initialZoomFactor: 0.5,
+                initialZoomFactor: 0.1,
                 intervalType: DateTimeIntervalType.auto,
                 dateFormat: DateFormat.yMMM().add_jm(),
                 majorGridLines: const MajorGridLines(width: 0),
