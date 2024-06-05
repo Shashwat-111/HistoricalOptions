@@ -51,7 +51,7 @@ class _MainChartState extends State<MainChart> {
     return Obx(
       () {
         // Check if the data list is null or empty and show a progress indicator
-        if (odController.ohlcDataList.isEmpty) {
+        if (odController.isLoading.value == true) {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         }

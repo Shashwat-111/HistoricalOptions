@@ -13,6 +13,7 @@ class OptionDataController extends GetxController {
   var selectedCandleTimeFrame = {"1m",}.obs;
   var selectedRight = {"call",}.obs;
   var temp = "".obs; // defined as update button is not working without it (showing incorrect use of getx error)
+  var isLoading = false.obs;
 
   var strikepriceapi = "34400".obs;
   var expiryapi = "24-Jun-2021".obs;
@@ -43,11 +44,13 @@ class OptionDataController extends GetxController {
  }
  
   void getData({required String expiry, required String right, required String strike}) async {
+    isLoading.value = true;
     var response = await RemoteService().getFullData("expiry=$expiry&right1=$right&strike=$strike");
     ohlcDataList.value = response!.ohlcData;
     stockCode.value = response.stockCode;
     expiryDate.value = response.expiryDate;
     strikePrice.value = response.strikePrice;
+    isLoading.value = false;
   }
 
   void setExpiry(String expiry){

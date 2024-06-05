@@ -10,6 +10,7 @@ class MyAppBar extends StatefulWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
+  
   OptionDataController odController = Get.put(OptionDataController());
   String? currentExpiry;
   String? currentStrike;
