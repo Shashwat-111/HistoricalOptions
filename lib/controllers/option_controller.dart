@@ -9,8 +9,8 @@ class OptionDataController extends GetxController {
   var stockCode = "NA".obs; 
   var expiryDate = "NA".obs; 
   var strikePrice = 0000.obs;
-  var expiryDates = ["NA"].obs;
-  var strikePriceList = ["NA"].obs;
+  var expiryDates = ["Loading..."].obs;
+  var strikePriceList = ["Loading..."].obs;
   var chartpart = 1.obs;
   var selectedCandleTimeFrame = {"1m",}.obs;
   var selectedRight = {"call",}.obs;

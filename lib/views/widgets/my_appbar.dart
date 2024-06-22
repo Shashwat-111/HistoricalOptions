@@ -10,45 +10,39 @@ class MyAppBar extends StatefulWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
-  
   OptionDataController odController = Get.put(OptionDataController());
   String? currentExpiry;
   String? currentStrike;
-  // List<String> indicators = [
-  //   "Atrr",
-  //   "BollingerBand",
-  //   "EMA",
-  //   "Macd",
-  //   "Momentum",
-  //   "RSI",
-  //   "SMA",
-  //   "Stochastic",
-  //   "Technical",
-  //   "TMA"
-  // ];
-  //String? currentIndicator;
+  List<String> indicators = [
+    "Atrr",
+    "BollingerBand",
+    "EMA",
+    "Macd",
+    "Momentum",
+    "RSI",
+    "SMA",
+    "Stochastic",
+    "Technical",
+    "TMA"
+  ];
+  String? currentIndicator;
 
   @override
   Widget build(BuildContext context) {
-    return
-      Container(
-        height: 50,
-        width: double.infinity,
-        //color: Color.fromRGBO(19,23,34,1),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const CircleAvatar(
-                maxRadius: 15,
-                backgroundColor: Colors.black,
-                child: Text(
-                  "S",
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
+                  backgroundColor: Colors.transparent,
+                  maxRadius: 15,
+                  child: Icon(Icons.person)),
               IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
               const Text("BANKNIFTY"),
               const SizedBox(
@@ -56,6 +50,14 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
               Obx(
                 () => SegmentedButton(
+                    style: ButtonStyle(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            0), // This makes the shape rectangular
+                        side: const BorderSide(), // Optional: Add a border color
+                      )),
+                    ),
                     showSelectedIcon: false,
                     segments: const [
                       ButtonSegment(value: "1m", label: Text("1m")),
@@ -75,17 +77,18 @@ class _MyAppBarState extends State<MyAppBar> {
                     focusColor: Colors.transparent,
                     hint: const Text("Select Expiry"),
                     value: currentExpiry,
-                    items: odController.expiryDates.map(buildMenuItems).toList(),
+                    items:
+                        odController.expiryDates.map(buildMenuItems).toList(),
                     onChanged: (item) {
                       setState(() {
                         currentExpiry = item;
-                        if (currentExpiry != null){
+                        if (currentExpiry != null) {
                           print(odController.selectedRight.first);
-                          odController.getStrikePriceData(expiry: currentExpiry!, right: odController.selectedRight.first);
+                          odController.getStrikePriceData(
+                              expiry: currentExpiry!,
+                              right: odController.selectedRight.first);
                           currentStrike = null;
                         }
-
-
                       });
                     }),
               ),
@@ -93,7 +96,15 @@ class _MyAppBarState extends State<MyAppBar> {
                 width: 20,
               ),
               Obx(
-                ()=> SegmentedButton(
+                () => SegmentedButton(
+                    style: ButtonStyle(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            0), // This makes the shape rectangular
+                        side: const BorderSide(), // Optional: Add a border color
+                      )),
+                    ),
                     showSelectedIcon: false,
                     segments: const [
                       ButtonSegment(value: "call", label: Text("call")),
@@ -103,14 +114,14 @@ class _MyAppBarState extends State<MyAppBar> {
                     onSelectionChanged: (value) {
                       odController.updateRight(value);
                       if (currentExpiry != null) {
-                        odController.getStrikePriceData(expiry: currentExpiry!, right: odController.selectedRight.first);
+                        odController.getStrikePriceData(
+                            expiry: currentExpiry!,
+                            right: odController.selectedRight.first);
                         setState(() {
                           currentStrike = null;
                         });
-
                       }
-                    }
-                    ),
+                    }),
               ),
               const SizedBox(
                 width: 20,
@@ -120,12 +131,13 @@ class _MyAppBarState extends State<MyAppBar> {
                     focusColor: Colors.transparent,
                     hint: const Text("Strike Price"),
                     value: currentStrike,
-                    items:
-                        odController.strikePriceList.map(buildMenuItems).toList(),
+                    items: odController.strikePriceList
+                        .map(buildMenuItems)
+                        .toList(),
                     onChanged: (item) {
                       setState(() {
                         currentStrike = item;
-                        if(currentStrike != null) {
+                        if (currentStrike != null) {
                           odController.setStrikeprice(item!);
                         }
                       });
@@ -136,29 +148,48 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
               Obx(
                 () => TextButton(
+                  style: ButtonStyle(
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0), // This makes the shape rectangular
+                side: const BorderSide(color: Colors.white), // Optional: Add a border color
+              )),
+                ),
                     onPressed: () {
-                      if(currentExpiry != null && currentStrike != null)
-                      {
-                      odController.getData(expiry: currentExpiry!, right: odController.selectedRight.first, strike: currentStrike!);
+                      if (currentExpiry != null && currentStrike != null) {
+                        odController.getData(
+                            expiry: currentExpiry!,
+                            right: odController.selectedRight.first,
+                            strike: currentStrike!);
                       }
                     },
-                    child: Text("Update${odController.temp}")),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.refresh),
+                        SizedBox(width: 5,),
+                        Text("Refresh${odController.temp}"),
+                      ],
+                    )),
+              ),
+              const SizedBox(
+                width: 20,
               ),
               // Indicator Dropdown currently commented
-              // DropdownButton(
-              //     focusColor: Colors.white,
-              //     hint: const Text("Select Indicator"),
-              //     value: currentIndicator,
-              //     items: indicators.map(buildMenuItems).toList(),
-              //     onChanged: (item) {
-              //       setState(() {
-              //         currentIndicator = item;
-              //       });
-              //     }),
+              DropdownButton(
+                  focusColor: Colors.transparent,
+                  hint: const Text("Select Indicator"),
+                  value: currentIndicator,
+                  items: indicators.map(buildMenuItems).toList(),
+                  onChanged: (item) {
+                    setState(() {
+                      currentIndicator = item;
+                    });
+                  }),
             ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   DropdownMenuItem<String> buildMenuItems(String item) => DropdownMenuItem(
