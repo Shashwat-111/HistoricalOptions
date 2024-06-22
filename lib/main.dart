@@ -17,9 +17,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: themeData,
       title: "Options View",
-      home: SafeArea(
+      home: const SafeArea(
         child: Scaffold(
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -34,3 +35,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+ThemeData themeData = ThemeData(
+      brightness: Brightness.dark
+);

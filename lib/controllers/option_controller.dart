@@ -1,4 +1,6 @@
-import 'package:fno_view/models/graph_data_calss.dart';
+import 'dart:ui';
+
+import 'package:fno_view/models/graph_data_class.dart';
 import 'package:fno_view/services/remote_service.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +14,13 @@ class OptionDataController extends GetxController {
   var chartpart = 1.obs;
   var selectedCandleTimeFrame = {"1m",}.obs;
   var selectedRight = {"call",}.obs;
-  var temp = "".obs; // defined as update button is not working without it (showing incorrect use of getx error)
+  var temp = "".obs; // defined, as update button is not working without it (showing incorrect use of getx error)
   var isLoading = false.obs;
+  var trackballOpen = "".obs;
+  var trackballHigh = "".obs;
+  var trackballLow = "".obs;
+  var trackballClose = "".obs;
+  var trackballColor = const Color(0xfff44336).obs;
 
   var strikepriceapi = "34400".obs;
   var expiryapi = "24-Jun-2021".obs;
@@ -28,7 +35,15 @@ class OptionDataController extends GetxController {
     super.onInit();
   }
 
- void updateCandleTimeFrame (Set<String> a){
+  void updatetrackballPoints (String a, String b, String c, String d, Color e){
+    trackballOpen.value = a;
+    trackballHigh.value = b;
+    trackballLow.value = c;
+    trackballClose.value = d;
+    trackballColor.value = e;
+  }
+
+  void updateCandleTimeFrame (Set<String> a){
   selectedCandleTimeFrame.value = a;
  }
 

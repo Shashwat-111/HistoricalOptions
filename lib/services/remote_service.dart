@@ -1,5 +1,5 @@
 import 'package:fno_view/models/expiry_data_class.dart';
-import 'package:fno_view/models/graph_data_calss.dart';
+import 'package:fno_view/models/graph_data_class.dart';
 import 'package:fno_view/models/strikes_list_class.dart';
 import 'package:http/http.dart' as http;
 

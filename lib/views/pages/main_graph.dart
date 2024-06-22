@@ -1,11 +1,14 @@
-import 'package:flutter/foundation.dart';
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/option_controller.dart';
-import 'package:fno_view/models/graph_data_calss.dart';
+import 'package:fno_view/models/graph_data_class.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:collection/collection.dart';
+
+import '../widgets/ohlc_text_display_row.dart';
 
 class MainChart extends StatefulWidget {
   const MainChart({
@@ -27,16 +30,22 @@ class _MainChartState extends State<MainChart> {
   void initState() {
     _crosshairBehavior = CrosshairBehavior(
       enable: true,
+      lineWidth: 0.5,
+      lineDashArray: [5, 5],
       shouldAlwaysShow: true,
       lineType: CrosshairLineType.horizontal,
       activationMode: ActivationMode.singleTap,
     );
     _trackballBehavior = TrackballBehavior(
+      tooltipDisplayMode: TrackballDisplayMode.none,
       enable: true,
+      lineWidth: 0.5,
+      lineDashArray: [5, 5],
       activationMode: ActivationMode.singleTap,
     );
     _zoomPanBehavior = ZoomPanBehavior(
-      maximumZoomLevel: 0.001,
+      enablePinching: true,
+      maximumZoomLevel: 0.1,
       enableMouseWheelZooming: true,
       enablePanning: true,
       enableSelectionZooming: true,
@@ -55,60 +64,90 @@ class _MainChartState extends State<MainChart> {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         }
-        if (kDebugMode) {
+        if (true) {
           print("The no. of candles is : ${odController.ohlcDataList.length}");
-          _initialData = odController.ohlcDataList;
-          //.slices(1000).toList()[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
-          print(_initialData.length);   
-          //print(_initialData);
+          _initialData =
+              odController.ohlcDataList.value.slices(300).toList()[0];
+          print(_initialData.length);
+          //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
         }
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: SfCartesianChart(
-              crosshairBehavior: _crosshairBehavior,
-              title: ChartTitle(
-                  text:
-                      "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
-                  alignment: ChartAlignment.near),
-              trackballBehavior: _trackballBehavior,
-              zoomPanBehavior: _zoomPanBehavior,
-              series: <CandleSeries>[
-                CandleSeries<OhlcDatum, DateTime>(
-                  //enableSolidCandles: true,
-                  animationDuration: 0,
-                  dataSource: _initialData,
-                  name: 'AAPL',
-                  xValueMapper: (OhlcDatum sales, _) => sales.datetime,
-                  lowValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.low),
-                  highValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.high),
-                  openValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.open),
-                  closeValueMapper: (OhlcDatum sales, _) =>
-                      double.parse(sales.close),
+            padding: const EdgeInsets.only(
+                right: 400, top: 10, left: 10, bottom: 10),
+            child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  Card(
+                elevation: 20,
+                child: SfCartesianChart(
+                  onTrackballPositionChanging: (trackballArgs) {
+                    odController.updatetrackballPoints(
+                        trackballArgs.chartPointInfo.chartPoint!.open
+                            .toString(),
+                        trackballArgs.chartPointInfo.chartPoint!.high
+                            .toString(),
+                        trackballArgs.chartPointInfo.chartPoint!.low
+                            .toString(),
+                        trackballArgs.chartPointInfo.chartPoint!.close
+                            .toString(),
+                        trackballArgs.chartPointInfo.color!,
+                    );
+                  },
+                  margin: const EdgeInsets.fromLTRB(40, 10, 10, 10),
+                  //backgroundColor: const Color.fromRGBO(23,27,38,1),
+                  title: ChartTitle(
+                      text:
+                          "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
+                      alignment: ChartAlignment.near),
+                  trackballBehavior: _trackballBehavior,
+                  zoomPanBehavior: _zoomPanBehavior,
+                  crosshairBehavior: _crosshairBehavior,
+                  series: <CandleSeries>[
+                    CandleSeries<OhlcDatum, DateTime>(
+                      enableSolidCandles: true,
+                      animationDuration: 0.5,
+                      dataSource: _initialData,
+                      xValueMapper: (OhlcDatum data, _) => data.datetime,
+                      lowValueMapper: (OhlcDatum data, _) =>
+                          double.parse(data.low),
+                      highValueMapper: (OhlcDatum data, _) =>
+                          double.parse(data.high),
+                      openValueMapper: (OhlcDatum data, _) =>
+                          double.parse(data.open),
+                      closeValueMapper: (OhlcDatum data, _) =>
+                          double.parse(data.close),
+                    ),
+                  ],
+                  primaryXAxis: buildDateTimeCategoryAxis(),
+                  primaryYAxis: buildNumericAxis(),
                 ),
-              ],
-              primaryXAxis: DateTimeCategoryAxis(
-                initialZoomPosition: 1,
-                interactiveTooltip: const InteractiveTooltip(),
-                initialZoomFactor: 0.1,
-                intervalType: DateTimeIntervalType.auto,
-                dateFormat: DateFormat.yMMM().add_jm(),
-                majorGridLines: const MajorGridLines(width: 0),
               ),
-              primaryYAxis: NumericAxis(
-                numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
-              ),
-            ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: OhlcValueTextColumn(),
+                  )
+            ]),
           ),
         );
       },
     );
   }
-
 }
 
-
-
+DateTimeCategoryAxis buildDateTimeCategoryAxis() {
+  return DateTimeCategoryAxis(
+    initialZoomPosition: 1,
+    interactiveTooltip: const InteractiveTooltip(),
+    initialZoomFactor: 0.2,
+    intervalType: DateTimeIntervalType.auto,
+    dateFormat: DateFormat("d MMM ''yy HH:mm"), // Adjusted date format
+    majorGridLines: const MajorGridLines(width: 1),
+  );
+}
+NumericAxis buildNumericAxis() {
+  return NumericAxis(
+    opposedPosition: true,
+    numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+  );
+}
