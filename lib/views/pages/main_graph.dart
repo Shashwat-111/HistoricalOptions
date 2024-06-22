@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/option_controller.dart';
 import 'package:fno_view/models/graph_data_class.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../widgets/ohlc_text_display_row.dart';
 
 class MainChart extends StatefulWidget {
@@ -64,10 +62,10 @@ class _MainChartState extends State<MainChart> {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         }
-        if (true) {
+        if (kDebugMode) {
           print("The no. of candles is : ${odController.ohlcDataList.length}");
           _initialData =
-              odController.ohlcDataList.value.slices(300).toList()[0];
+              odController.ohlcDataList.slices(300).toList()[0];
           print(_initialData.length);
           //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
         }
@@ -78,60 +76,60 @@ class _MainChartState extends State<MainChart> {
             child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Card(
-                elevation: 20,
-                child: SfCartesianChart(
-                  onTrackballPositionChanging: (trackballArgs) {
-                    odController.updatetrackballPoints(
-                        trackballArgs.chartPointInfo.chartPoint!.open
-                            .toString(),
-                        trackballArgs.chartPointInfo.chartPoint!.high
-                            .toString(),
-                        trackballArgs.chartPointInfo.chartPoint!.low
-                            .toString(),
-                        trackballArgs.chartPointInfo.chartPoint!.close
-                            .toString(),
-                        trackballArgs.chartPointInfo.color!,
-                    );
-                  },
-                  margin: const EdgeInsets.fromLTRB(40, 10, 10, 10),
-                  //backgroundColor: const Color.fromRGBO(23,27,38,1),
-                  title: ChartTitle(
-                      text:
-                          "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
-                      alignment: ChartAlignment.near),
-                  trackballBehavior: _trackballBehavior,
-                  zoomPanBehavior: _zoomPanBehavior,
-                  crosshairBehavior: _crosshairBehavior,
-                  series: <CandleSeries>[
-                    CandleSeries<OhlcDatum, DateTime>(
-                      enableSolidCandles: true,
-                      animationDuration: 0.5,
-                      dataSource: _initialData,
-                      xValueMapper: (OhlcDatum data, _) => data.datetime,
-                      lowValueMapper: (OhlcDatum data, _) =>
-                          double.parse(data.low),
-                      highValueMapper: (OhlcDatum data, _) =>
-                          double.parse(data.high),
-                      openValueMapper: (OhlcDatum data, _) =>
-                          double.parse(data.open),
-                      closeValueMapper: (OhlcDatum data, _) =>
-                          double.parse(data.close),
-                    ),
-                  ],
-                  primaryXAxis: buildDateTimeCategoryAxis(),
-                  primaryYAxis: buildNumericAxis(),
-                ),
-              ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: OhlcValueTextColumn(),
-                  )
+                  buildSfCartesianChart(),
+                  OhlcValueTextColumn()
             ]),
           ),
         );
       },
     );
+  }
+
+  Card buildSfCartesianChart() {
+    return Card(
+              elevation: 20,
+              child: SfCartesianChart(
+                onTrackballPositionChanging: (trackballArgs) {
+                  odController.updateTrackballPoints(
+                      trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+                      trackballArgs.chartPointInfo.chartPoint!.high
+                          !.toStringAsFixed(2),
+                      trackballArgs.chartPointInfo.chartPoint!.low
+                          !.toStringAsFixed(2),
+                      trackballArgs.chartPointInfo.chartPoint!.close
+                          !.toStringAsFixed(2),
+                      trackballArgs.chartPointInfo.color!,
+                  );
+                },
+                margin: const EdgeInsets.fromLTRB(40, 10, 10, 10),
+                //backgroundColor: const Color.fromRGBO(23,27,38,1),
+                title: ChartTitle(
+                    text:
+                        "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
+                    alignment: ChartAlignment.near),
+                trackballBehavior: _trackballBehavior,
+                zoomPanBehavior: _zoomPanBehavior,
+                crosshairBehavior: _crosshairBehavior,
+                series: <CandleSeries>[
+                  CandleSeries<OhlcDatum, DateTime>(
+                    enableSolidCandles: true,
+                    animationDuration: 0.5,
+                    dataSource: _initialData,
+                    xValueMapper: (OhlcDatum data, _) => data.datetime,
+                    lowValueMapper: (OhlcDatum data, _) =>
+                        double.parse(data.low),
+                    highValueMapper: (OhlcDatum data, _) =>
+                        double.parse(data.high),
+                    openValueMapper: (OhlcDatum data, _) =>
+                        double.parse(data.open),
+                    closeValueMapper: (OhlcDatum data, _) =>
+                        double.parse(data.close),
+                  ),
+                ],
+                primaryXAxis: buildDateTimeCategoryAxis(),
+                primaryYAxis: buildNumericAxis(),
+              ),
+            );
   }
 }
 

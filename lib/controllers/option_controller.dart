@@ -35,7 +35,7 @@ class OptionDataController extends GetxController {
     super.onInit();
   }
 
-  void updatetrackballPoints (String a, String b, String c, String d, Color e){
+  void updateTrackballPoints (String a, String b, String c, String d, Color e){
     trackballOpen.value = a;
     trackballHigh.value = b;
     trackballLow.value = c;
