@@ -51,7 +51,7 @@ class _MainChartState extends State<MainChart> {
       activationMode: ActivationMode.singleTap,
     );
     _trackballBehavior = TrackballBehavior(
-      //tooltipDisplayMode: TrackballDisplayMode.none,
+      tooltipDisplayMode: TrackballDisplayMode.none,
       enable: true,
       lineWidth: 0.5,
       lineDashArray: [5, 5],
@@ -139,19 +139,15 @@ class _MainChartState extends State<MainChart> {
     return Card(
       elevation: 20,
       child: SfCartesianChart(
-        //todo: when indicators are also displayed in chart, the values below dont make sense/give null values.
-        // onTrackballPositionChanging: (trackballArgs) {
-        //   odController.updateTrackballPoints(
-        //       trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-        //       trackballArgs.chartPointInfo.chartPoint!.high
-        //           !.toStringAsFixed(2),
-        //       trackballArgs.chartPointInfo.chartPoint!.low
-        //           !.toStringAsFixed(2),
-        //       trackballArgs.chartPointInfo.chartPoint!.close
-        //           !.toStringAsFixed(2),
-        //       trackballArgs.chartPointInfo.color!,
-        //   );
-        // },
+        onTrackballPositionChanging: (trackballArgs) {
+          odController.updateTrackballPoints(
+              trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.color!,
+          );
+        },
         margin: const EdgeInsets.fromLTRB(50, 50, 10, 10),
         //backgroundColor: const Color.fromRGBO(23,27,38,1),
         // title: ChartTitle(
