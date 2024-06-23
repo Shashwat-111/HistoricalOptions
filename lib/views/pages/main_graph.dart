@@ -1,10 +1,6 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fno_view/controllers/option_controller.dart';
 import 'package:fno_view/models/graph_data_class.dart';
 import 'package:get/get.dart';
@@ -27,17 +23,21 @@ class _MainChartState extends State<MainChart> {
   late CrosshairBehavior _crosshairBehavior;
 
   late List<OhlcDatum> _initialData;
+
+  //don't change the order of this list
   List<String> indicators = [
-    "Average True Range",
-    "Bollinger Bands",
-    "Exponential Moving Average",
-    "Moving Average Convergence Divergence",
+    "Bollinger Band",
+    "Relative Strength Index (RSI)",
+    "Simple Moving Average (SMA)",
+    "Exponential Moving Average (EMA)",
+    "Moving Average Convergence Divergence (MACD)",
+    "Average True Range (ATR)",
     "Momentum",
-    "Relative Strength Index",
-    "Simple Moving Average",
-    "Stochastic Oscillator",
-    "Technical Indicator",
-    "Triangular Moving Average"
+    "Stochastic",
+    "Accumulation Distribution (AD)",
+    "Triangular Moving Average (TMA)",
+    "Rate of Change (ROC)",
+    "Weighted Moving Average (WMA)"
   ];
 
   @override
@@ -60,7 +60,7 @@ class _MainChartState extends State<MainChart> {
 
     _zoomPanBehavior = ZoomPanBehavior(
       enablePinching: true,
-      maximumZoomLevel: 0.1,
+      maximumZoomLevel: 0.05,
       enableMouseWheelZooming: true,
       enablePanning: true,
       enableSelectionZooming: true,
@@ -83,7 +83,8 @@ class _MainChartState extends State<MainChart> {
         }
         if (kDebugMode) {
           print("The no. of candles is : ${odController.ohlcDataList.length}");
-          _initialData = odController.ohlcDataList.slices(300).toList()[0];
+          var temp = odController.ohlcDataList.slices(800).toList();
+          _initialData = temp[temp.length-1];
           print(_initialData.length);
           //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
         }
@@ -100,7 +101,7 @@ class _MainChartState extends State<MainChart> {
               Expanded(
                 flex: 1,
                 child: Column(
-                  children: [NewWidget(indicators: indicators), buildWatchlist()],
+                  children: [IndicatorSelectorArea(indicators: indicators), buildWatchlist()],
                 ),
               )
             ],
@@ -181,40 +182,44 @@ class _MainChartState extends State<MainChart> {
   }
 }
 
-class NewWidget extends StatelessWidget {
-  const NewWidget({
+class IndicatorSelectorArea extends StatelessWidget {
+  IndicatorSelectorArea({
     super.key,
     required this.indicators,
   });
 
   final List<String> indicators;
-
+  final OptionDataController odController = Get.put(OptionDataController());
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: SizedBox.expand(
             child: Card(
           elevation: 20,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Technical Indicator", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 10,),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10,10,0,0),
+                    child: Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  ),
+                  const SizedBox(height: 10,),
                   Expanded(
                     child: ListView.builder(
                       itemCount: indicators.length,
                         itemBuilder: (_,n){
                       return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.check_box_outline_blank_sharp),
-                            SizedBox(width: 5,),
-                            Text(indicators[n]),
-                          ],
+                        padding: const EdgeInsets.all(0),
+                        child: Obx(
+                            ()=> CheckboxListTile(
+                              title: Text(indicators[n]),
+                              value: odController.selectedIndicators[n],
+                              onChanged: (bool? isSelected){
+                                //print("index $n bool value: $isSelected");
+                                odController.updateSelectedIndicator(n, isSelected);
+                          }),
                         ),
                       );
                     }),
@@ -231,7 +236,7 @@ DateTimeCategoryAxis buildDateTimeCategoryAxis() {
   return DateTimeCategoryAxis(
     initialZoomPosition: 1,
     interactiveTooltip: const InteractiveTooltip(),
-    initialZoomFactor: 0.2,
+    initialZoomFactor: 0.25,
     intervalType: DateTimeIntervalType.auto,
     dateFormat: DateFormat("d MMM ''yy HH:mm"), // Adjusted date format
     majorGridLines: const MajorGridLines(width: 1),
@@ -246,74 +251,46 @@ NumericAxis buildNumericAxis() {
 }
 
 List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
-  List<bool> selectedIndicators = List.generate(12, (_) => false);
-  print(selectedIndicators);
+  OptionDataController odController = Get.put(OptionDataController());
+  var selectedIndicators = odController.selectedIndicators;
+  //print(selectedIndicators);
   List<TechnicalIndicator<dynamic, dynamic>> indicators = [];
-
+  String _name = "candle";
   if (selectedIndicators[0]) {
-    indicators.add(AccumulationDistributionIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+    indicators.add(BollingerBandIndicator(seriesName: _name));
   }
   if (selectedIndicators[1]) {
-    indicators.add(AtrIndicator<dynamic, dynamic>(
-      period: 3,
-      seriesName: 'candle',
-    ));
+    indicators.add(RsiIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[2]) {
-    indicators.add(BollingerBandIndicator(
-      seriesName: "candle",
-    ));
+    indicators.add(SmaIndicator<dynamic, dynamic>(period: 5, seriesName: _name));
   }
   if (selectedIndicators[3]) {
-    indicators.add(EmaIndicator<dynamic, dynamic>(
-      period: 14,
-      seriesName: 'candle',
-    ));
+    indicators.add(EmaIndicator<dynamic, dynamic>(period: 14, seriesName: _name));
   }
   if (selectedIndicators[4]) {
-    indicators.add(MacdIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+    indicators.add(MacdIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[5]) {
-    indicators.add(MomentumIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+    indicators.add(AtrIndicator<dynamic, dynamic>(period: 3, seriesName: _name));
   }
   if (selectedIndicators[6]) {
-    indicators.add(RsiIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+    indicators.add(MomentumIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[7]) {
-    indicators.add(SmaIndicator<dynamic, dynamic>(
-      period: 5,
-      seriesName: 'candle',
-    ));
+    indicators.add(StochasticIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[8]) {
-    indicators.add(StochasticIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+    indicators.add(AccumulationDistributionIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[9]) {
-    indicators.add(TmaIndicator<dynamic, dynamic>(
-      period: 9,
-      seriesName: 'candle',
-    ));
+    indicators.add(TmaIndicator<dynamic, dynamic>(period: 9, seriesName: _name));
   }
-  if (true) {
-    indicators.add(RocIndicator<dynamic, dynamic>(
-      seriesName: 'candle',
-    ));
+  if (selectedIndicators[10]) {
+    indicators.add(RocIndicator<dynamic, dynamic>(seriesName: _name));
   }
   if (selectedIndicators[11]) {
-    indicators.add(WmaIndicator<dynamic, dynamic>(
-      period: 5,
-      seriesName: 'candle',
-    ));
+    indicators.add(WmaIndicator<dynamic, dynamic>(period: 5, seriesName: _name));
   }
 
   return indicators;

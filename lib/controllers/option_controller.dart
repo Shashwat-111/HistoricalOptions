@@ -25,14 +25,19 @@ class OptionDataController extends GetxController {
   var strikepriceapi = "34400".obs;
   var expiryapi = "24-Jun-2021".obs;
   var rightapi = "call".obs;
-  
-
+  var selectedIndicators = List.generate(12, (_) => false).obs;
   @override
   void onInit() {
     getData(expiry: "24-Jun-2021", right: "call", strike: "34400");
     getExpiryData();
     //getStrikePriceData(expiry: "24-Jun-2021", right: "call");
     super.onInit();
+  }
+
+  void updateSelectedIndicator(index, bool? isSelected) {
+    selectedIndicators[index]= isSelected!;
+    //print("update called");
+    //print(selectedIndicators);
   }
 
   void updateTrackballPoints (String a, String b, String c, String d, Color e){

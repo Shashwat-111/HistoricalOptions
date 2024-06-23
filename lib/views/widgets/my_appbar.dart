@@ -174,17 +174,6 @@ class _MyAppBarState extends State<MyAppBar> {
               const SizedBox(
                 width: 20,
               ),
-              // Indicator Dropdown currently commented
-              DropdownButton(
-                  focusColor: Colors.transparent,
-                  hint: const Text("Select Indicator"),
-                  value: currentIndicator,
-                  items: indicators.map(buildMenuItems).toList(),
-                  onChanged: (item) {
-                    setState(() {
-                      currentIndicator = item;
-                    });
-                  }),
             ],
           ),
         ),
