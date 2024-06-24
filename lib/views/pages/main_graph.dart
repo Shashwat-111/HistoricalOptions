@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/option_controller.dart';
 import 'package:fno_view/models/graph_data_class.dart';
@@ -42,6 +41,7 @@ class _MainChartState extends State<MainChart> {
 
   @override
   void initState() {
+
     _crosshairBehavior = CrosshairBehavior(
       enable: true,
       lineWidth: 0.5,
@@ -51,7 +51,7 @@ class _MainChartState extends State<MainChart> {
       activationMode: ActivationMode.singleTap,
     );
     _trackballBehavior = TrackballBehavior(
-      tooltipDisplayMode: TrackballDisplayMode.none,
+      tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
       enable: true,
       lineWidth: 0.5,
       lineDashArray: [5, 5],
@@ -65,7 +65,7 @@ class _MainChartState extends State<MainChart> {
       enablePanning: true,
       enableSelectionZooming: true,
       selectionRectBorderColor: Colors.red,
-      zoomMode: ZoomMode.x,
+      zoomMode: ZoomMode.xy,
     );
     super.initState();
   }
@@ -81,11 +81,14 @@ class _MainChartState extends State<MainChart> {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         }
-        if (kDebugMode) {
-          print("The no. of candles is : ${odController.ohlcDataList.length}");
+        if (true) {
+          //print("The no. of candles is : ${odController.ohlcDataList.length}");
+          //_initialData = odController.ohlcDataList.toList();
+
           var temp = odController.ohlcDataList.slices(800).toList();
           _initialData = temp[temp.length-1];
-          print(_initialData.length);
+
+          //print(_initialData.length);
           //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
         }
         return SizedBox(
@@ -148,16 +151,16 @@ class _MainChartState extends State<MainChart> {
     return Card(
       elevation: 20,
       child: SfCartesianChart(
-        onTrackballPositionChanging: (trackballArgs) {
-          odController.updateTrackballPoints(
-              trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.color!,
-            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
-          );
-        },
+        // onTrackballPositionChanging: (trackballArgs) {
+        //   odController.updateTrackballPoints(
+        //       trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.color!,
+        //     //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
+        //   );
+        // },
         margin: const EdgeInsets.fromLTRB(50, 50, 10, 10),
         trackballBehavior: _trackballBehavior,
         zoomPanBehavior: _zoomPanBehavior,
