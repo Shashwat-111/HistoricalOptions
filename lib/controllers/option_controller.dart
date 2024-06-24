@@ -20,6 +20,7 @@ class OptionDataController extends GetxController {
   var trackballHigh = "".obs;
   var trackballLow = "".obs;
   var trackballClose = "".obs;
+  //var trackballVolume = "".obs;
   var trackballColor = const Color(0xfff44336).obs;
 
   var strikepriceapi = "34400".obs;
@@ -46,6 +47,7 @@ class OptionDataController extends GetxController {
     trackballLow.value = c;
     trackballClose.value = d;
     trackballColor.value = e;
+
   }
 
   void updateCandleTimeFrame (Set<String> a){

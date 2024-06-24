@@ -131,7 +131,16 @@ class _MainChartState extends State<MainChart> {
       padding: const EdgeInsets.all(8),
       child: Stack(
           alignment: Alignment.topCenter,
-          children: [buildSfCartesianChart(), OhlcValueTextColumn()]),
+          children: [
+            buildSfCartesianChart(),
+            OhlcValueTextColumn(),
+            Positioned(
+              top: 10,
+                left: 20,
+                child: Text( "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}")),
+          ]
+      ),
+
     );
   }
 
@@ -146,14 +155,10 @@ class _MainChartState extends State<MainChart> {
             trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.color!,
+            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
           );
         },
         margin: const EdgeInsets.fromLTRB(50, 50, 10, 10),
-        //backgroundColor: const Color.fromRGBO(23,27,38,1),
-        // title: ChartTitle(
-        //     text:
-        //         "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
-        //     alignment: ChartAlignment.near),
         trackballBehavior: _trackballBehavior,
         zoomPanBehavior: _zoomPanBehavior,
         crosshairBehavior: _crosshairBehavior,
