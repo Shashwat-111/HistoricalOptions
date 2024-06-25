@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
       () => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: odController.darkMode.value,
-        title: "Options View",
+        title: "HistoricalOptions.in",
         home: const SafeArea(
           child: Scaffold(
             body: Column(
