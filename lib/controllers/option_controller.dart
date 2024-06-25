@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:fno_view/models/graph_data_class.dart';
 import 'package:fno_view/services/remote_service.dart';
@@ -109,8 +107,6 @@ class OptionDataController extends GetxController {
   }
 
     getStrikePriceData({required String expiry, required String right}) async {
-    print(expiry);
-    print(right);
     var response = await RemoteService().getStrikePriceList(expiry, right);
 
     //todo remove this if else statements and the sublist function when backend has rectified its error.

@@ -78,7 +78,6 @@ class _ChartAreaState extends State<ChartArea> {
       if (true) {
         //print("The no. of candles is : ${odController.ohlcDataList.length}");
         //_initialData = odController.ohlcDataList.toList();
-        print("is this geeting run?");
         var temp = odController.ohlcDataList.slices(1500).toList();
         _initialData = temp[temp.length - 1];
 
