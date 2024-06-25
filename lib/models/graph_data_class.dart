@@ -91,3 +91,50 @@ class OhlcDatum {
         "volume": volume,
     };
 }
+
+
+List<OhlcDatum> aggregateOHLC(List<OhlcDatum> ohlcData, int intervalMinutes) {
+    List<OhlcDatum> result = [];
+    ohlcData.sort((a, b) => a.datetime.compareTo(b.datetime));
+
+    DateTime? currentIntervalStart;
+    List<OhlcDatum> chunk = [];
+
+    for (var datum in ohlcData) {
+        currentIntervalStart ??= datum.datetime;
+
+        if (datum.datetime.difference(currentIntervalStart).inMinutes < intervalMinutes) {
+            chunk.add(datum);
+        } else {
+            result.add(_aggregateChunk(chunk));
+            chunk = [datum];
+            currentIntervalStart = datum.datetime;
+        }
+    }
+
+    if (chunk.isNotEmpty) {
+        result.add(_aggregateChunk(chunk));
+    }
+
+    return result;
+}
+
+OhlcDatum _aggregateChunk(List<OhlcDatum> chunk) {
+    double open = double.parse(chunk.first.open);
+    double close = double.parse(chunk.last.close);
+    double high = chunk.map((e) => double.parse(e.high)).reduce((a, b) => a > b ? a : b);
+    double low = chunk.map((e) => double.parse(e.low)).reduce((a, b) => a < b ? a : b);
+    int volume = chunk.map((e) => e.volume).reduce((a, b) => a + b);
+    int openInterest = chunk.last.openInterest;
+
+    return OhlcDatum(
+        open: open.toString(),
+        high: high.toString(),
+        low: low.toString(),
+        close: close.toString(),
+        count: chunk.length,
+        datetime: chunk.first.datetime,
+        openInterest: openInterest,
+        volume: volume,
+    );
+}

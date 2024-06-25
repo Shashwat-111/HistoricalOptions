@@ -41,7 +41,6 @@ class _MainChartState extends State<MainChart> {
 
   @override
   void initState() {
-
     _crosshairBehavior = CrosshairBehavior(
       enable: true,
       lineWidth: 0.5,
@@ -85,8 +84,9 @@ class _MainChartState extends State<MainChart> {
           //print("The no. of candles is : ${odController.ohlcDataList.length}");
           //_initialData = odController.ohlcDataList.toList();
 
-          var temp = odController.ohlcDataList.slices(800).toList();
+          var temp = odController.ohlcDataList.slices(1500).toList();
           _initialData = temp[temp.length-1];
+
 
           //print(_initialData.length);
           //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values

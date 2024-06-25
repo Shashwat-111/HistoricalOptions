@@ -66,7 +66,9 @@ class _MyAppBarState extends State<MyAppBar> {
                   ],
                   selected: odController.selectedCandleTimeFrame,
                   onSelectionChanged: (value) {
-                    //odController.updateCandleTimeFrame(value);
+                    odController.updateCandleTimeFrame(value);
+                    int timeFrame = convertTimeFrameToMinutes(odController.selectedCandleTimeFrame.first);
+                    odController.aggregateOHLC(odController.ohlcDataListOriginal, timeFrame);
                   }),
 
             const SizedBox(
@@ -76,9 +78,9 @@ class _MyAppBarState extends State<MyAppBar> {
                   focusColor: Colors.transparent,
                   hint: const Text("Select Expiry"),
                   value: currentExpiry,
-                  items:
-                      odController.expiryDates.map(buildMenuItems).toList(),
+                  items: odController.expiryDates.map(buildMenuItems).toList(),
                   onChanged: (item) {
+                    //print(odController.expiryDates.map(buildMenuItems).toList());
                     setState(() {
                       currentExpiry = item;
                       if (currentExpiry != null) {
@@ -191,4 +193,17 @@ class _MyAppBarState extends State<MyAppBar> {
           style: const TextStyle(fontSize: 12),
         ),
       );
+}
+
+int convertTimeFrameToMinutes(String timeFrame) {
+  switch (timeFrame) {
+    case '1m':
+      return 1;
+    case '5m':
+      return 5;
+    case '15m':
+      return 15;
+    default:
+      throw ArgumentError('Unsupported time frame: $timeFrame');
+  }
 }
