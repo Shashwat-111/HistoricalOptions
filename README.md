@@ -4,7 +4,7 @@ A website for viewing historical options data of the Indian market in candlestic
 
 flutter clean 
 flutter pub get 
-flutter build web --base-href /HistoricalOptions.in/ --release
+flutter build web --base-href / --release
 cd build/web
 git init 
 git add . 

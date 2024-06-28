@@ -23,6 +23,7 @@ class OptionDataController extends GetxController {
   var trackballColor = const Color(0xfff44336).obs;
   var darkMode = ThemeData(brightness: Brightness.dark).obs;
   var isDarkMode = true.obs;
+  var isDeviceSmall = false.obs;
 
   var strikepriceapi = "34400".obs;
   var expiryapi = "24-Jun-2021".obs;
@@ -64,6 +65,9 @@ class OptionDataController extends GetxController {
   selectedCandleTimeFrame.value = a;
  }
 
+ void updateDeviceSize (bool isSmall){
+    isDeviceSmall.value = isSmall;
+    }
  void updateRight (Set<String> a){
   selectedRight.value = a;
  }

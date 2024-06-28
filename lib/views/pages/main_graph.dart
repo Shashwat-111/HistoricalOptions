@@ -17,51 +17,37 @@ class MainChart extends StatefulWidget {
 class _MainChartState extends State<MainChart> {
   OptionDataController odController = Get.put(OptionDataController());
   //don't change the order of this list
-  List<String> indicators = [
-    "Bollinger Band",
-    "Relative Strength Index (RSI)",
-    "Simple Moving Average (SMA)",
-    "Exponential Moving Average (EMA)",
-    "Moving Average Convergence Divergence (MACD)",
-    "Average True Range (ATR)",
-    "Momentum",
-    "Stochastic",
-    "Accumulation Distribution (AD)",
-    "Triangular Moving Average (TMA)",
-    "Rate of Change (ROC)",
-    "Weighted Moving Average (WMA)"
-  ];
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Obx(
-      () {
-        return SizedBox(
+    bool isDeviceSmall = width < 1000 ? true : false;
+    return SizedBox(
           height:
               height - 50, //todo make 50 a global variable named appBarHeight
           width: width,
-          child: Row(
-            children: [
-              const Expanded(
-                flex: 3,
-                child: ChartArea(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    IndicatorSelectorArea(indicators: indicators),
-                    //buildWatchlist()
-                  ],
-                ),
-              )
-            ],
-          ),
+          child: isDeviceSmall ? const ChartArea() : buildFullScreen(),
         );
-      },
-    );
+  }
+
+  Row buildFullScreen() {
+    return Row(
+          children: [
+            const Expanded(
+              flex: 3,
+              child: ChartArea(),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  IndicatorSelectorArea(indicators: indicators),
+                  //buildWatchlist()
+                ],
+              ),
+            )
+          ],
+        );
   }
 
   Widget buildWatchlist() {
@@ -143,8 +129,9 @@ DateTimeCategoryAxis buildDateTimeCategoryAxis() {
 }
 
 NumericAxis buildNumericAxis() {
+  OptionDataController odController = Get.put(OptionDataController());
   return NumericAxis(
-    opposedPosition: true,
+    opposedPosition: !(odController.isDeviceSmall.value),
     numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
   );
 }
@@ -194,3 +181,18 @@ List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
 
   return indicators;
 }
+
+List<String> indicators = [
+  "Bollinger Band",
+  "Relative Strength Index (RSI)",
+  "Simple Moving Average (SMA)",
+  "Exponential Moving Average (EMA)",
+  "Moving Average Convergence Divergence (MACD)",
+  "Average True Range (ATR)",
+  "Momentum",
+  "Stochastic",
+  "Accumulation Distribution (AD)",
+  "Triangular Moving Average (TMA)",
+  "Rate of Change (ROC)",
+  "Weighted Moving Average (WMA)"
+];

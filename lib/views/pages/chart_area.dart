@@ -93,14 +93,17 @@ class _ChartAreaState extends State<ChartArea> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Stack(
-          alignment: Alignment.topCenter,
+          alignment: odController.isDeviceSmall.value ? Alignment.topLeft : Alignment.topRight,
           children: [
             buildSfCartesianChart(),
             OhlcValueTextColumn(),
             Positioned(
-                top: 10,
-                left: 20,
-                child: Text( "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}")),
+                top: odController.isDeviceSmall.value ? 5 : 10,
+                left: 10,
+                child: Text(
+                    "${odController.stockCode} | ${odController.expiryDate} | ${odController.strikePrice}",
+                  style: const TextStyle(fontSize: 16),
+                )),
           ]
       ),
 
@@ -108,6 +111,7 @@ class _ChartAreaState extends State<ChartArea> {
   }
 
   Widget buildSfCartesianChart() {
+
     return Card(
       elevation: 20,
       child: SfCartesianChart(
@@ -121,7 +125,7 @@ class _ChartAreaState extends State<ChartArea> {
             //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
           );
         },
-        margin: const EdgeInsets.fromLTRB(50, 50, 10, 10),
+        margin: odController.isDeviceSmall.value ? const EdgeInsets.fromLTRB(10, 50, 10, 10) : const EdgeInsets.fromLTRB(50, 50, 10, 10),
         trackballBehavior: _trackballBehavior,
         zoomPanBehavior: _zoomPanBehavior,
         crosshairBehavior: _crosshairBehavior,
