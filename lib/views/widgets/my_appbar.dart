@@ -1,4 +1,3 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:fno_view/controllers/option_controller.dart";
 import "package:get/get.dart";
@@ -67,9 +66,9 @@ class _MyAppBarState extends State<MyAppBar> {
           const SizedBox(width: 20),
           buildRefreshButton(),
           const Spacer(),
-          const Text("Dark Mode"),
+          // const Text("Dark Mode"),
+          darkModeIconButton(),
           const SizedBox(width: 10),
-          buildDarkModeSwitch()
         ],
       ),
     );
@@ -125,6 +124,20 @@ class _MyAppBarState extends State<MyAppBar> {
             odController.switchDarkMode(newValue);
           });
         });
+  }
+
+  Widget darkModeIconButton() {
+    return Tooltip(
+      message: 'Switch theme',
+      child: IconButton(
+          onPressed: (){
+            setState(() {
+              odController.switchDarkMode(!odController.isDarkMode.value);
+            });
+          },
+          icon: odController.isDarkMode.value ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode)
+      ),
+    );
   }
 
   TextButton buildRefreshButton() {
