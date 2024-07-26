@@ -8,7 +8,7 @@ class OhlcValueTextColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: odController.isDeviceSmall.value ? const EdgeInsets.fromLTRB(10, 25,0,8) : const EdgeInsets.all(8),
+      padding: odController.isDeviceSmall.value ? const EdgeInsets.fromLTRB(10, 25,0,8) : const EdgeInsets.all(5),
       child: Obx(
             ()=> Row(
                       mainAxisAlignment: odController.isDeviceSmall.value ? MainAxisAlignment.start : MainAxisAlignment.end,

@@ -13,7 +13,6 @@ class MainChart extends StatefulWidget {
   @override
   State<MainChart> createState() => _MainChartState();
 }
-
 class _MainChartState extends State<MainChart> {
   OptionDataController odController = Get.put(OptionDataController());
   //don't change the order of this list
@@ -41,7 +40,7 @@ class _MainChartState extends State<MainChart> {
               flex: 1,
               child: Column(
                 children: [
-                  IndicatorSelectorArea(indicators: indicators),
+                  IndicatorSelectorArea(indicators: indicators1),
                   //buildWatchlist()
                 ],
               ),
@@ -78,62 +77,35 @@ class IndicatorSelectorArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox.expand(
-            child: Card(
-          elevation: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10,10,0,0),
-                    child: Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                  ),
-                  const SizedBox(height: 10,),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: indicators.length,
-                        itemBuilder: (_,n){
-                      return Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Obx(
-                            ()=> CheckboxListTile(
-                              title: Text(indicators[n]),
-                              value: odController.selectedIndicators[n],
-                              onChanged: (bool? isSelected){
-                                //print("index $n bool value: $isSelected");
-                                odController.updateSelectedIndicator(n, isSelected);
-                          }),
-                        ),
-                      );
-                    }),
-                  )
-                ],
-              ),
-        )),
-      ),
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color : Colors.black)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              const SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: indicators.length,
+                    itemBuilder: (_,n){
+                  return Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Obx(
+                        ()=> CheckboxListTile(
+                          title: Text(indicators[n]),
+                          value: odController.selectedIndicators[n],
+                          onChanged: (bool? isSelected){
+                            //print("index $n bool value: $isSelected");
+                            odController.updateSelectedIndicator(n, isSelected);
+                      }),
+                    ),
+                  );
+                }),
+              )
+            ],
+          )),
     );
   }
-}
-
-DateTimeCategoryAxis buildDateTimeCategoryAxis() {
-  return DateTimeCategoryAxis(
-    initialZoomPosition: 1,
-    interactiveTooltip: const InteractiveTooltip(),
-    initialZoomFactor: 0.25,
-    intervalType: DateTimeIntervalType.auto,
-    dateFormat: DateFormat("d MMM ''yy HH:mm"), // Adjusted date format
-    majorGridLines: const MajorGridLines(width: 1),
-  );
-}
-
-NumericAxis buildNumericAxis() {
-  OptionDataController odController = Get.put(OptionDataController());
-  return NumericAxis(
-    opposedPosition: !(odController.isDeviceSmall.value),
-    numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
-  );
 }
 
 List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
@@ -182,7 +154,7 @@ List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
   return indicators;
 }
 
-List<String> indicators = [
+List<String> indicators1 = [
   "Bollinger Band",
   "Relative Strength Index (RSI)",
   "Simple Moving Average (SMA)",
