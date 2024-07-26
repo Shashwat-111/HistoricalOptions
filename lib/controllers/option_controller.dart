@@ -15,14 +15,15 @@ class OptionDataController extends GetxController {
   var selectedRight = {"call",}.obs;
   var temp = "".obs; // defined, as update button is not working without it (showing incorrect use of getx error)
   var isLoading = false.obs;
-  var trackballOpen = "".obs;
-  var trackballHigh = "".obs;
-  var trackballLow = "".obs;
-  var trackballClose = "".obs;
+  var trackballOpen = "0.00".obs;
+  var trackballHigh = "0.00".obs;
+  var trackballLow = "0.00".obs;
+  var trackballClose = "0.00".obs;
   //var trackballVolume = "".obs;
   var trackballColor = const Color(0xfff44336).obs;
   var darkMode = ThemeData(brightness: Brightness.dark).obs;
   var isDarkMode = true.obs;
+  var isDeviceSmall = false.obs;
 
   var strikepriceapi = "34400".obs;
   var expiryapi = "24-Jun-2021".obs;
@@ -64,6 +65,9 @@ class OptionDataController extends GetxController {
   selectedCandleTimeFrame.value = a;
  }
 
+ void updateDeviceSize (bool isSmall){
+    isDeviceSmall.value = isSmall;
+    }
  void updateRight (Set<String> a){
   selectedRight.value = a;
  }

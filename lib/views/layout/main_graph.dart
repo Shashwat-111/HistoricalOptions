@@ -13,55 +13,40 @@ class MainChart extends StatefulWidget {
   @override
   State<MainChart> createState() => _MainChartState();
 }
-
 class _MainChartState extends State<MainChart> {
   OptionDataController odController = Get.put(OptionDataController());
   //don't change the order of this list
-  List<String> indicators = [
-    "Bollinger Band",
-    "Relative Strength Index (RSI)",
-    "Simple Moving Average (SMA)",
-    "Exponential Moving Average (EMA)",
-    "Moving Average Convergence Divergence (MACD)",
-    "Average True Range (ATR)",
-    "Momentum",
-    "Stochastic",
-    "Accumulation Distribution (AD)",
-    "Triangular Moving Average (TMA)",
-    "Rate of Change (ROC)",
-    "Weighted Moving Average (WMA)"
-  ];
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Obx(
-      () {
-        return SizedBox(
+    bool isDeviceSmall = width < 1000 ? true : false;
+    return SizedBox(
           height:
               height - 50, //todo make 50 a global variable named appBarHeight
           width: width,
-          child: Row(
-            children: [
-              const Expanded(
-                flex: 3,
-                child: ChartArea(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    IndicatorSelectorArea(indicators: indicators),
-                    //buildWatchlist()
-                  ],
-                ),
-              )
-            ],
-          ),
+          child: isDeviceSmall ? const ChartArea() : buildFullScreen(),
         );
-      },
-    );
+  }
+
+  Row buildFullScreen() {
+    return Row(
+          children: [
+            const Expanded(
+              flex: 3,
+              child: ChartArea(),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  IndicatorSelectorArea(indicators: indicators1),
+                  //buildWatchlist()
+                ],
+              ),
+            )
+          ],
+        );
   }
 
   Widget buildWatchlist() {
@@ -92,61 +77,35 @@ class IndicatorSelectorArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox.expand(
-            child: Card(
-          elevation: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10,10,0,0),
-                    child: Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                  ),
-                  const SizedBox(height: 10,),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: indicators.length,
-                        itemBuilder: (_,n){
-                      return Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Obx(
-                            ()=> CheckboxListTile(
-                              title: Text(indicators[n]),
-                              value: odController.selectedIndicators[n],
-                              onChanged: (bool? isSelected){
-                                //print("index $n bool value: $isSelected");
-                                odController.updateSelectedIndicator(n, isSelected);
-                          }),
-                        ),
-                      );
-                    }),
-                  )
-                ],
-              ),
-        )),
-      ),
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color : Colors.black)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              const SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: indicators.length,
+                    itemBuilder: (_,n){
+                  return Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Obx(
+                        ()=> CheckboxListTile(
+                          title: Text(indicators[n]),
+                          value: odController.selectedIndicators[n],
+                          onChanged: (bool? isSelected){
+                            //print("index $n bool value: $isSelected");
+                            odController.updateSelectedIndicator(n, isSelected);
+                      }),
+                    ),
+                  );
+                }),
+              )
+            ],
+          )),
     );
   }
-}
-
-DateTimeCategoryAxis buildDateTimeCategoryAxis() {
-  return DateTimeCategoryAxis(
-    initialZoomPosition: 1,
-    interactiveTooltip: const InteractiveTooltip(),
-    initialZoomFactor: 0.25,
-    intervalType: DateTimeIntervalType.auto,
-    dateFormat: DateFormat("d MMM ''yy HH:mm"), // Adjusted date format
-    majorGridLines: const MajorGridLines(width: 1),
-  );
-}
-
-NumericAxis buildNumericAxis() {
-  return NumericAxis(
-    opposedPosition: true,
-    numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
-  );
 }
 
 List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
@@ -194,3 +153,18 @@ List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
 
   return indicators;
 }
+
+List<String> indicators1 = [
+  "Bollinger Band",
+  "Relative Strength Index (RSI)",
+  "Simple Moving Average (SMA)",
+  "Exponential Moving Average (EMA)",
+  "Moving Average Convergence Divergence (MACD)",
+  "Average True Range (ATR)",
+  "Momentum",
+  "Stochastic",
+  "Accumulation Distribution (AD)",
+  "Triangular Moving Average (TMA)",
+  "Rate of Change (ROC)",
+  "Weighted Moving Average (WMA)"
+];
