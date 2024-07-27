@@ -13,13 +13,21 @@ class _LeftSidebarState extends State<LeftSidebar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        IconButton(onPressed: (){setState(() {
-          panLock = !panLock;
-        });}, icon: panLock ? Icon(Icons.lock_outline_sharp) : Icon(Icons.lock_open_sharp)),
-        IconButton(onPressed: (){}, icon: Icon(Icons.candlestick_chart_outlined)),
-        IconButton(onPressed: (){}, icon: Icon(Icons.mode_edit_outlined)),
-        IconButton(onPressed: (){}, icon: Icon(Icons.straighten_outlined)),
-        IconButton(onPressed: (){}, icon: Icon(Icons.text_fields_sharp)),
+        IconButton(
+          tooltip: "Lock Chart",
+          onPressed: (){
+            setState(() {
+              panLock = !panLock;
+            });
+            },
+          icon: panLock
+            ? const Icon(Icons.lock_outline_sharp)
+            : const Icon(Icons.lock_open_sharp,),),
+        IconButton(onPressed: (){}, icon: const Icon(Icons.candlestick_chart_outlined),tooltip:"Candle type"),
+        IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",),
+        IconButton(onPressed: (){}, icon: const Icon(Icons.straighten_outlined), tooltip:"measure",),
+        IconButton(onPressed: (){}, icon: const Icon(Icons.title_outlined), tooltip:"Add Text",),
+        IconButton(onPressed: (){}, icon: const Icon(Icons.chat_bubble_outline_sharp), tooltip:"tooltip",),
 
       ],
     );
