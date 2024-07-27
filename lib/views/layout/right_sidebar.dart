@@ -12,6 +12,7 @@ class _RightSidebarState extends State<RightSidebar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        themeSwitchButton(),
         IconButton(onPressed: (){}, icon: const Icon(Icons.color_lens_outlined)),
         RotatedBox(
           quarterTurns: 1,
@@ -21,4 +22,5 @@ class _RightSidebarState extends State<RightSidebar> {
       ],
     );
   }
+  Widget themeSwitchButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.light_mode_outlined));
 }

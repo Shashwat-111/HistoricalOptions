@@ -34,15 +34,12 @@ class _MyAppBarState extends State<MyAppBar> {
             const SizedBox(width: 10),
             indicatorsButton(),
             const Spacer(),
-            themeSwitchButton(),
             notificationButton()
           ],
         );
   }
 
   Widget notificationButton() => const SizedBox(width: sideBarWidth,child: Icon(Icons.notifications_none_sharp),);
-
-  Widget themeSwitchButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.light_mode_outlined));
 
   Widget indicatorsButton() => MyTextIconButton(icon: Icons.bar_chart_sharp, text: "Indicators", onPressed: (){});
 
