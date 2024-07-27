@@ -1,21 +1,18 @@
-import "package:dropdown_button2/dropdown_button2.dart";
 import "package:flutter/material.dart";
 import "package:fno_view/controllers/option_controller.dart";
 import "package:fno_view/utils/constants.dart";
 import "package:get/get.dart";
-import "../../utils/convert_timeframe_to_minutes.dart";
-import "../../utils/dropdown_menu_item.dart";
 import "../widgets/custom_dropdown_button.dart";
 import "../widgets/my_text_icon_button.dart";
 
-class MyAppBar2 extends StatefulWidget {
-  const MyAppBar2({super.key});
+class MyAppBar extends StatefulWidget {
+  const MyAppBar({super.key});
 
   @override
-  State<MyAppBar2> createState() => _MyAppBar2State();
+  State<MyAppBar> createState() => _MyAppBarState();
 }
 
-class _MyAppBar2State extends State<MyAppBar2> {
+class _MyAppBarState extends State<MyAppBar> {
   OptionDataController odController = Get.put(OptionDataController());
   @override
   Widget build(BuildContext context) {
@@ -31,18 +28,25 @@ class _MyAppBar2State extends State<MyAppBar2> {
             const SizedBox(width: 10),
             strikeDropdown(),
             const SizedBox(width: 10),
-            IconButton(onPressed: (){}, icon: Icon(Icons.refresh)),
+            refreshButton(),
             const SizedBox(width: 10),
             verticalDivider(),
             const SizedBox(width: 10),
-            MyTextIconButton(icon: Icons.bar_chart_sharp, text: "Indicators", onPressed: (){}),
+            indicatorsButton(),
             const Spacer(),
-            IconButton(onPressed: (){}, icon: Icon(Icons.light_mode_outlined)),
-            SizedBox(width: sideBarWidth,child: Icon(Icons.notifications_none_sharp),)
-
+            themeSwitchButton(),
+            notificationButton()
           ],
         );
   }
+
+  Widget notificationButton() => const SizedBox(width: sideBarWidth,child: Icon(Icons.notifications_none_sharp),);
+
+  Widget themeSwitchButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.light_mode_outlined));
+
+  Widget indicatorsButton() => MyTextIconButton(icon: Icons.bar_chart_sharp, text: "Indicators", onPressed: (){});
+
+  Widget refreshButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.refresh));
 
   Widget expiryDropdown() {
     return Obx((){
@@ -53,7 +57,6 @@ class _MyAppBar2State extends State<MyAppBar2> {
         hintText: "Select Expiry",
         width: 150,
         onChanged: (v){
-          print("selected $v");
           ///todo: call the strike price api using this expiry "v".
           ///or wait for thr user to select a right (call/put)
         },
@@ -70,7 +73,6 @@ class _MyAppBar2State extends State<MyAppBar2> {
         hintText: "Select Right",
         width: 150,
         onChanged: (v){
-          print("selected $v");
           ///todo: call the strike price api using this expiry "v".
           ///or wait for thr user to select a right (call/put)
         },
@@ -87,7 +89,6 @@ class _MyAppBar2State extends State<MyAppBar2> {
         hintText: "Select Strike",
         width: 150,
         onChanged: (v){
-          print("selected $v");
           ///todo: call the strike price api using this expiry "v".
           ///or wait for thr user to select a right (call/put)
         },
@@ -139,6 +140,8 @@ class _MyAppBar2State extends State<MyAppBar2> {
   }
 }
 
+
+//old App Bar
 // class MyAppBar extends StatefulWidget {
 //   const MyAppBar({super.key});
 //
@@ -482,7 +485,7 @@ class _MyAppBar2State extends State<MyAppBar2> {
 //         });
 //   }
 //
-//   //trying to make a popup menu for time frome selection instead of segmented button
+//   //trying to make a popup menu for time frame selection instead of segmented button
 //   Widget timeFrameNew() {
 //     return Container(
 //       child: PopupMenuButton(
