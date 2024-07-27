@@ -10,6 +10,7 @@ class MyTextIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         style: ButtonStyle(
+          iconColor: WidgetStateProperty.all(Colors.black),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius:
@@ -22,9 +23,9 @@ class MyTextIconButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           //textBaseline: TextBaseline.alphabetic,
           children: [
-            Icon(Icons.add),
+            Icon(icon),
             const SizedBox(width: 5),
-            Text(text),
+            Text(text, style: const TextStyle(color: Colors.black),),
           ],
         ));
   }
