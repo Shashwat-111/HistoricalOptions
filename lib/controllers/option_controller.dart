@@ -21,8 +21,7 @@ class OptionDataController extends GetxController {
   var trackballClose = "0.00".obs;
   //var trackballVolume = "".obs;
   var trackballColor = const Color(0xfff44336).obs;
-  var darkMode = ThemeData(brightness: Brightness.dark).obs;
-  var isDarkMode = true.obs;
+
   var isDeviceSmall = false.obs;
 
   var strikepriceapi = "34400".obs;
@@ -42,16 +41,7 @@ class OptionDataController extends GetxController {
     //print("update called");
     //print(selectedIndicators);
   }
- void switchDarkMode(bool darkmode){
-    if (darkmode == true){
-      darkMode.value = ThemeData(brightness: Brightness.dark);
-      isDarkMode.value = true;
-    }
-    if (darkmode == false){
-      darkMode.value = ThemeData(brightness: Brightness.light);
-      isDarkMode.value =false;
-    }
- }
+
   void updateTrackballPoints (String a, String b, String c, String d, Color e){
     trackballOpen.value = a;
     trackballHigh.value = b;
