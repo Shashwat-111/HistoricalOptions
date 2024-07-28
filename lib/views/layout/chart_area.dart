@@ -132,7 +132,20 @@ class _ChartAreaState extends State<ChartArea> {
         indicators: getIndicators(),
         enableSideBySideSeriesPlacement: false,
         series: [
-          CandleSeries<OhlcDatum, DateTime>(
+          // checks if user wants bar or candle type graph and selects the chart
+          chartSettingController.candleType.value == CandleType.bar
+          ? HiloOpenCloseSeries<OhlcDatum, DateTime>(
+            //enableTooltip: true,
+            name: "candle",
+            animationDuration: 0.5,
+            dataSource: _initialData,
+            xValueMapper: (OhlcDatum data, _) => data.datetime,
+            lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
+            highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
+            openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
+            closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+          )
+          : CandleSeries<OhlcDatum, DateTime>(
             //enableTooltip: true,
             name: "candle",
             enableSolidCandles: true,

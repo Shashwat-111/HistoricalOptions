@@ -25,7 +25,7 @@ class _LeftSidebarState extends State<LeftSidebar> {
           icon: chartSettingController.enablePan.value
             ? const Icon(Icons.lock_open_sharp)
             : const Icon(Icons.lock_outline_sharp),),
-        IconButton(onPressed: (){}, icon: const Icon(Icons.candlestick_chart_outlined),tooltip:"Candle type"),
+        IconButton(onPressed: (){chartSettingController.switchCandleType();}, icon: const Icon(Icons.candlestick_chart_outlined),tooltip:"Candle type"),
         IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",),
         IconButton(onPressed: (){}, icon: const Icon(Icons.straighten_outlined), tooltip:"measure",),
         IconButton(onPressed: (){}, icon: const Icon(Icons.title_outlined), tooltip:"Add Text",),
