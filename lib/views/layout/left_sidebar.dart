@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:get/get.dart';
 
 class LeftSidebar extends StatefulWidget {
   const LeftSidebar({super.key});
@@ -8,7 +10,7 @@ class LeftSidebar extends StatefulWidget {
 }
 
 class _LeftSidebarState extends State<LeftSidebar> {
-  bool panLock = true;
+  ChartSettingController chartSettingController = Get.put(ChartSettingController());
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,12 +19,12 @@ class _LeftSidebarState extends State<LeftSidebar> {
           tooltip: "Lock Chart",
           onPressed: (){
             setState(() {
-              panLock = !panLock;
+              chartSettingController.switchPanMode();
             });
             },
-          icon: panLock
-            ? const Icon(Icons.lock_outline_sharp)
-            : const Icon(Icons.lock_open_sharp,),),
+          icon: chartSettingController.enablePan.value
+            ? const Icon(Icons.lock_open_sharp)
+            : const Icon(Icons.lock_outline_sharp),),
         IconButton(onPressed: (){}, icon: const Icon(Icons.candlestick_chart_outlined),tooltip:"Candle type"),
         IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",),
         IconButton(onPressed: (){}, icon: const Icon(Icons.straighten_outlined), tooltip:"measure",),

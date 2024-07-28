@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:fno_view/controllers/chart_setting_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -43,15 +44,15 @@ class _ChartAreaState extends State<ChartArea> {
       activationMode: ActivationMode.singleTap,
     );
 
-    _zoomPanBehavior = ZoomPanBehavior(
-      enablePinching: true,
-      maximumZoomLevel: 0.05,
-      enableMouseWheelZooming: true,
-      enablePanning: true,
-      enableSelectionZooming: true,
-      selectionRectBorderColor: Colors.red,
-      zoomMode: ZoomMode.xy,
-    );
+    // _zoomPanBehavior = ZoomPanBehavior(
+    //   enablePinching: true,
+    //   maximumZoomLevel: 0.05,
+    //   enableMouseWheelZooming: true,
+    //   enablePanning: true,
+    //   enableSelectionZooming: true,
+    //   selectionRectBorderColor: Colors.red,
+    //   zoomMode: ZoomMode.xy,
+    // );
 
     _tooltipBehavior = TooltipBehavior(
       enable: false,
@@ -99,43 +100,55 @@ class _ChartAreaState extends State<ChartArea> {
   }
 
   Widget buildSfCartesianChart() {
-    return SfCartesianChart(
-      backgroundColor: Colors.white,
-      margin: odController.isDeviceSmall.value
-          ? const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5)
-          : const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
-      tooltipBehavior: _tooltipBehavior,
-      onTrackballPositionChanging: (trackballArgs) {
-        odController.updateTrackballPoints(
-          trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-          trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-          trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-          trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-          trackballArgs.chartPointInfo.color!,
-          //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
-        );
-      },
-      trackballBehavior: _trackballBehavior,
-      zoomPanBehavior: _zoomPanBehavior,
-      crosshairBehavior: _crosshairBehavior,
-      indicators: getIndicators(),
-      enableSideBySideSeriesPlacement: false,
-      series: [
-        CandleSeries<OhlcDatum, DateTime>(
-          //enableTooltip: true,
-          name: "candle",
-          enableSolidCandles: true,
-          animationDuration: 0.5,
-          dataSource: _initialData,
-          xValueMapper: (OhlcDatum data, _) => data.datetime,
-          lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
-          highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
-          openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
-          closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+    ChartSettingController chartSettingController = Get.put(ChartSettingController());
+    return Obx(() {
+      return SfCartesianChart(
+        backgroundColor: Colors.white,
+        margin: odController.isDeviceSmall.value
+            ? const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5)
+            : const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
+        tooltipBehavior: _tooltipBehavior,
+        onTrackballPositionChanging: (trackballArgs) {
+          odController.updateTrackballPoints(
+            trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.color!,
+            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
+          );
+        },
+        trackballBehavior: _trackballBehavior,
+        zoomPanBehavior: ZoomPanBehavior(
+          enablePinching: true,
+          maximumZoomLevel: 0.05,
+          enableMouseWheelZooming: true,
+          enablePanning: chartSettingController.enablePan.value,
+          enableSelectionZooming: true,
+          selectionRectBorderColor: Colors.red,
+          zoomMode: ZoomMode.xy,
         ),
-      ],
-      primaryXAxis: buildDateTimeCategoryAxis(),
-      primaryYAxis: buildNumericAxis(),
+        crosshairBehavior: _crosshairBehavior,
+        indicators: getIndicators(),
+        enableSideBySideSeriesPlacement: false,
+        series: [
+          CandleSeries<OhlcDatum, DateTime>(
+            //enableTooltip: true,
+            name: "candle",
+            enableSolidCandles: true,
+            animationDuration: 0.5,
+            dataSource: _initialData,
+            xValueMapper: (OhlcDatum data, _) => data.datetime,
+            lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
+            highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
+            openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
+            closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+          ),
+        ],
+        primaryXAxis: buildDateTimeCategoryAxis(),
+        primaryYAxis: buildNumericAxis(),
+      );
+    }
     );
   }
 }
