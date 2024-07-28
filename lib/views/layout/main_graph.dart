@@ -4,6 +4,7 @@ import 'package:fno_view/models/graph_data_class.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../widgets/Indicator_dialog_box.dart';
 import 'chart_area.dart';
 
 class MainChart extends StatefulWidget {
@@ -40,7 +41,7 @@ class _MainChartState extends State<MainChart> {
               flex: 1,
               child: Column(
                 children: [
-                  IndicatorSelectorArea(indicators: indicators1),
+                  IndicatorSelectorArea(indicators: supportedIndicatorList),
                   //buildWatchlist()
                 ],
               ),
@@ -65,106 +66,3 @@ class _MainChartState extends State<MainChart> {
   }
 
 }
-
-class IndicatorSelectorArea extends StatelessWidget {
-  IndicatorSelectorArea({
-    super.key,
-    required this.indicators,
-  });
-
-  final List<String> indicators;
-  final OptionDataController odController = Get.put(OptionDataController());
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(border: Border.all(color : Colors.black)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Technical Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-              const SizedBox(height: 10,),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: indicators.length,
-                    itemBuilder: (_,n){
-                  return Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Obx(
-                        ()=> CheckboxListTile(
-                          title: Text(indicators[n]),
-                          value: odController.selectedIndicators[n],
-                          onChanged: (bool? isSelected){
-                            //print("index $n bool value: $isSelected");
-                            odController.updateSelectedIndicator(n, isSelected);
-                      }),
-                    ),
-                  );
-                }),
-              )
-            ],
-          )),
-    );
-  }
-}
-
-List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
-  OptionDataController odController = Get.put(OptionDataController());
-  var selectedIndicators = odController.selectedIndicators;
-  //print(selectedIndicators);
-  List<TechnicalIndicator<dynamic, dynamic>> indicators = [];
-  String _name = "candle";
-  if (selectedIndicators[0]) {
-    indicators.add(BollingerBandIndicator(seriesName: _name));
-  }
-  if (selectedIndicators[1]) {
-    indicators.add(RsiIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[2]) {
-    indicators.add(SmaIndicator<dynamic, dynamic>(period: 5, seriesName: _name));
-  }
-  if (selectedIndicators[3]) {
-    indicators.add(EmaIndicator<dynamic, dynamic>(period: 14, seriesName: _name));
-  }
-  if (selectedIndicators[4]) {
-    indicators.add(MacdIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[5]) {
-    indicators.add(AtrIndicator<dynamic, dynamic>(period: 3, seriesName: _name));
-  }
-  if (selectedIndicators[6]) {
-    indicators.add(MomentumIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[7]) {
-    indicators.add(StochasticIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[8]) {
-    indicators.add(AccumulationDistributionIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[9]) {
-    indicators.add(TmaIndicator<dynamic, dynamic>(period: 9, seriesName: _name));
-  }
-  if (selectedIndicators[10]) {
-    indicators.add(RocIndicator<dynamic, dynamic>(seriesName: _name));
-  }
-  if (selectedIndicators[11]) {
-    indicators.add(WmaIndicator<dynamic, dynamic>(period: 5, seriesName: _name));
-  }
-
-  return indicators;
-}
-
-List<String> indicators1 = [
-  "Bollinger Band",
-  "Relative Strength Index (RSI)",
-  "Simple Moving Average (SMA)",
-  "Exponential Moving Average (EMA)",
-  "Moving Average Convergence Divergence (MACD)",
-  "Average True Range (ATR)",
-  "Momentum",
-  "Stochastic",
-  "Accumulation Distribution (AD)",
-  "Triangular Moving Average (TMA)",
-  "Rate of Change (ROC)",
-  "Weighted Moving Average (WMA)"
-];
