@@ -2,8 +2,10 @@ import "package:flutter/material.dart";
 import "package:fno_view/controllers/option_controller.dart";
 import "package:fno_view/utils/constants.dart";
 import "package:get/get.dart";
+import "../widgets/Indicator_dialog_box.dart";
 import "../widgets/custom_dropdown_button.dart";
 import "../widgets/my_text_icon_button.dart";
+import "main_graph.dart";
 
 class MyAppBar extends StatefulWidget {
   const MyAppBar({super.key});
@@ -41,7 +43,38 @@ class _MyAppBarState extends State<MyAppBar> {
 
   Widget notificationButton() => const SizedBox(width: sideBarWidth,child: Icon(Icons.notifications_none_sharp),);
 
-  Widget indicatorsButton() => MyTextIconButton(icon: Icons.bar_chart_sharp, text: "Indicators", onPressed: (){});
+  Widget indicatorsButton()
+  => MyTextIconButton(
+      icon: Icons.bar_chart_sharp, text: "Indicators",
+      onPressed: (){
+        showDialog(context: context, builder: (context){
+          return IndicatorDialogBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: const Text("Indicators", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                ),
+                const SizedBox(height: 20,),
+                IndicatorSelectorArea(indicators: supportedIndicatorList,),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                        onPressed: (){Navigator.pop(context);},
+                        child: const Text("ok")
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+      }
+  );
 
   Widget refreshButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.refresh));
 

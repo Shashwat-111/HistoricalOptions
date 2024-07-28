@@ -7,6 +7,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../controllers/option_controller.dart';
 import '../../models/graph_data_class.dart';
+import '../../utils/get_indicator_function.dart';
+import '../widgets/Indicator_dialog_box.dart';
 import '../widgets/ohlc_text_display_row.dart';
 import 'main_graph.dart';
 
