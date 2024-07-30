@@ -4,13 +4,11 @@ import 'package:fno_view/controllers/chart_setting_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/option_controller.dart';
 import '../../models/graph_data_class.dart';
 import '../../utils/get_indicator_function.dart';
-import '../widgets/Indicator_dialog_box.dart';
 import '../widgets/ohlc_text_display_row.dart';
-import 'main_graph.dart';
 
 class ChartArea extends StatefulWidget {
   const ChartArea({super.key});
@@ -20,7 +18,8 @@ class ChartArea extends StatefulWidget {
 }
 
 class _ChartAreaState extends State<ChartArea> {
-  OptionDataController odController = Get.put(OptionDataController());
+  //OptionDataController odController = Get.put(OptionDataController());
+  OhlcDataController dataController = Get.put(OhlcDataController());
   late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
   late CrosshairBehavior _crosshairBehavior;
@@ -66,13 +65,13 @@ class _ChartAreaState extends State<ChartArea> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Check if the data list is null or empty and show a progress indicator
-      if (odController.isLoading.value == true) {
+      if (dataController.isLoading.value == true) {
         return const Center(child: CircularProgressIndicator());
       }
       if (true) {
         //print("The no. of candles is : ${odController.ohlcDataList.length}");
         //_initialData = odController.ohlcDataList.toList();
-        var temp = odController.ohlcDataList.slices(1500).toList();
+        var temp = dataController.ohlcDataList.slices(1500).toList();
         _initialData = temp[temp.length - 1];
 
         //print(_initialData.length);
@@ -84,9 +83,7 @@ class _ChartAreaState extends State<ChartArea> {
 
   Widget buildChartArea() {
     return Stack(
-        alignment: odController.isDeviceSmall.value
-            ? Alignment.topLeft
-            : Alignment.topRight,
+        alignment: Alignment.topRight,
         children: [
           buildSfCartesianChart(),
           OhlcValueTextColumn(),
@@ -94,7 +91,7 @@ class _ChartAreaState extends State<ChartArea> {
               top: 5,
               left: 5,
               child: Text(
-                "BANKNIFTY INDEX OPTIONS\n${odController.expiryDate} | CALL | ${odController.strikePrice}",
+                "BANKNIFTY INDEX OPTIONS\n${dataController.currentExpiry} | ${dataController.currentRight.toUpperCase()} | ${dataController.currentStrike}",
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               )),
@@ -106,20 +103,19 @@ class _ChartAreaState extends State<ChartArea> {
     return Obx(() {
       return SfCartesianChart(
         backgroundColor: Colors.white,
-        margin: odController.isDeviceSmall.value
-            ? const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5)
-            : const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
+        margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
         tooltipBehavior: _tooltipBehavior,
-        onTrackballPositionChanging: (trackballArgs) {
-          odController.updateTrackballPoints(
-            trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.color!,
-            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
-          );
-        },
+        //todo make a new controller for this.
+        // onTrackballPositionChanging: (trackballArgs) {
+        //   odController.updateTrackballPoints(
+        //     trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+        //     trackballArgs.chartPointInfo.color!,
+        //     //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
+        //   );
+        // },
         trackballBehavior: _trackballBehavior,
         zoomPanBehavior: ZoomPanBehavior(
           enablePinching: true,

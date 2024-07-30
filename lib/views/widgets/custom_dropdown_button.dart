@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomDropdownButton extends StatefulWidget {
   final String labelText;
+  final String? value;
   final String hintText;
   final double width;
   final double height;
@@ -15,6 +16,7 @@ class CustomDropdownButton extends StatefulWidget {
     required this.labelText,
     required this.hintText,
     required this.width,
+    this.value,
     required this.initialMenuItems, this.onChanged,
   });
 
@@ -35,12 +37,14 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
 
   @override
   Widget build(BuildContext context) {
-    String? selectedValue;
     return Center(
       child: SizedBox(
         width: widget.width,
         height: widget.height,
         child: DropdownButtonFormField2<String>(
+          value: widget.value != null && menuItems.contains(widget.value)
+              ? widget.value
+              : null,
           decoration: InputDecoration(
             labelStyle: const TextStyle(fontSize: 12),
             labelText: widget.labelText,
@@ -66,9 +70,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
           ))
               .toList(),
           onChanged: newOnchange,
-          onSaved: (value) {
-            selectedValue = value.toString();
-          },
+          //value: null,
           buttonStyleData: const ButtonStyleData(
             padding: EdgeInsets.only(right: 8),
           ),
