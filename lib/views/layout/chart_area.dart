@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/option_controller.dart';
+import '../../controllers/trackball_controller.dart';
 import '../../models/graph_data_class.dart';
 import '../../utils/get_indicator_function.dart';
 import '../widgets/ohlc_text_display_row.dart';
@@ -18,10 +19,13 @@ class ChartArea extends StatefulWidget {
 }
 
 class _ChartAreaState extends State<ChartArea> {
-  //OptionDataController odController = Get.put(OptionDataController());
+
   OhlcDataController dataController = Get.put(OhlcDataController());
+  ChartSettingController chartSettingController = Get.put(ChartSettingController());
+  TrackballController trackballController = Get.put(TrackballController());
+
   late TrackballBehavior _trackballBehavior;
-  late ZoomPanBehavior _zoomPanBehavior;
+  // late ZoomPanBehavior _zoomPanBehavior;
   late CrosshairBehavior _crosshairBehavior;
   late TooltipBehavior _tooltipBehavior;
   late List<OhlcDatum> _initialData;
@@ -99,23 +103,21 @@ class _ChartAreaState extends State<ChartArea> {
   }
 
   Widget buildSfCartesianChart() {
-    ChartSettingController chartSettingController = Get.put(ChartSettingController());
     return Obx(() {
       return SfCartesianChart(
         backgroundColor: Colors.white,
         margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
         tooltipBehavior: _tooltipBehavior,
-        //todo make a new controller for this.
-        // onTrackballPositionChanging: (trackballArgs) {
-        //   odController.updateTrackballPoints(
-        //     trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-        //     trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-        //     trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-        //     trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-        //     trackballArgs.chartPointInfo.color!,
-        //     //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
-        //   );
-        // },
+        onTrackballPositionChanging: (trackballArgs) {
+          trackballController.updateTrackballPoints(
+            trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+            trackballArgs.chartPointInfo.color!,
+            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
+          );
+        },
         trackballBehavior: _trackballBehavior,
         zoomPanBehavior: ZoomPanBehavior(
           enablePinching: true,
