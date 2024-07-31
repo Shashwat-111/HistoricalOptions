@@ -6,7 +6,6 @@ import 'package:fno_view/views/layout/chart_area.dart';
 import 'package:fno_view/views/layout/left_sidebar.dart';
 import 'package:fno_view/views/layout/right_sidebar.dart';
 import 'package:get/get.dart';
-import 'controllers/option_controller.dart';
 import 'controllers/theme_controller.dart';
 
 void main() {
@@ -52,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                     Container(
                       width: sideBarWidth,
                       color: Colors.white,
-                      child: LeftSidebar(),
+                      child: const LeftSidebar(),
                     ),
 
                     Column(
@@ -99,7 +98,7 @@ class _MyAppState extends State<MyApp> {
                     Container(
                       width: sideBarWidth,
                       color: Colors.white,
-                      child: RightSidebar(),
+                      child: const RightSidebar(),
                     )
                   ],
                 ),
@@ -111,49 +110,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-//Old MyApp
-// class MyApp extends StatefulWidget {
-//   const MyApp({super.key});
-//
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-//
-// class _MyAppState extends State<MyApp> {
-//   OptionDataController odController = Get.put(OptionDataController());
-//   @override
-//   Widget build(BuildContext context) {
-//     var width = MediaQuery.of(context).size.width;
-//     if (width<1000){
-//       odController.updateDeviceSize(true);
-//     }
-//     if (width>=1000){
-//       odController.updateDeviceSize(false);
-//     }
-//     return Obx(
-//       () => SizedBox(
-//         height: 792,
-//         width: 1200,
-//         child: MaterialApp(
-//           debugShowCheckedModeBanner: false,
-//           theme: odController.darkMode.value,
-//           title: "HistoricalOptions.in",
-//           home: const SafeArea(
-//             child: Scaffold(
-//               body: Column(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   MyAppBar(),
-//                   MainChart(),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//

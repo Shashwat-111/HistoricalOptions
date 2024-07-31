@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:get/get.dart';
 
 // Controls the display of OHLC values for each candlestick when hovered.

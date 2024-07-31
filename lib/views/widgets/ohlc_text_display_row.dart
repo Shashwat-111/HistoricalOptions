@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fno_view/controllers/ohlc_data_controller.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
-import '../../controllers/option_controller.dart';
 import '../../controllers/trackball_controller.dart';
 
 class OhlcValueTextColumn extends StatelessWidget {
@@ -40,8 +38,8 @@ class OhlcValueTextColumn extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text("Vol :${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
-                  SizedBox(width: 10,),
-                  Text(" Change: "),
+                  const SizedBox(width: 10,),
+                  const Text(" Change: "),
                   Text("${getPercentageChange(trackballController.trackballIndex.value)} %", style:TextStyle(color: trackballController.trackballColor.value))
                 ],
               )

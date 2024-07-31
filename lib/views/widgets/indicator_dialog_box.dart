@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../../controllers/indicator_controller.dart';
-import '../../controllers/option_controller.dart';
 
 class IndicatorDialogBox extends StatefulWidget {
   final Widget child;
@@ -31,7 +27,7 @@ class IndicatorSelectorArea extends StatelessWidget {
   });
 
   final List<String> indicators;
-  IndicatorController indicatorController = Get.put(IndicatorController());
+  final IndicatorController indicatorController = Get.put(IndicatorController());
   @override
   Widget build(BuildContext context) {
     return SizedBox(
