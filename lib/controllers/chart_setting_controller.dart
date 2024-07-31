@@ -8,7 +8,7 @@ enum CandleType {
 class ChartSettingController extends GetxController {
   var enablePan = true.obs;
   var enableZoom = true.obs;
-  var candleType = CandleType.bar.obs;
+  var candleType = CandleType.candle.obs;
 
   switchPanMode(){
     enablePan.value = !enablePan.value;

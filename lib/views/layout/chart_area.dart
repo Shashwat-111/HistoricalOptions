@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controllers/ohlc_data_controller.dart';
-import '../../controllers/option_controller.dart';
 import '../../controllers/trackball_controller.dart';
 import '../../models/graph_data_class.dart';
 import '../../utils/get_indicator_function.dart';
@@ -48,7 +47,6 @@ class _ChartAreaState extends State<ChartArea> {
       lineDashArray: [5, 5],
       activationMode: ActivationMode.singleTap,
     );
-
     // _zoomPanBehavior = ZoomPanBehavior(
     //   enablePinching: true,
     //   maximumZoomLevel: 0.05,
@@ -58,7 +56,6 @@ class _ChartAreaState extends State<ChartArea> {
     //   selectionRectBorderColor: Colors.red,
     //   zoomMode: ZoomMode.xy,
     // );
-
     _tooltipBehavior = TooltipBehavior(
       enable: false,
     );
@@ -68,148 +65,135 @@ class _ChartAreaState extends State<ChartArea> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // Check if the data list is null or empty and show a progress indicator
+      // show a progress indicator till data is being fetched
       if (dataController.isLoading.value == true) {
         return const Center(child: CircularProgressIndicator());
       }
-      if (true) {
-        //print("The no. of candles is : ${odController.ohlcDataList.length}");
-        //_initialData = odController.ohlcDataList.toList();
-        var temp = dataController.ohlcDataList.slices(1500).toList();
-        _initialData = temp[temp.length - 1];
-
-        //print(_initialData.length);
-        //[odController.chartpart.value];    //this makes a list of list of ohlcData with 1000 values
-      }
-      return buildChartArea();
+      //huge number of candles are causing performance issue so,
+      //using less number of candles till lazy loading is implemented
+      _initialData = decreaseNumberOfCandles();
+      return buildChartLayout2();
     });
   }
 
-  Widget buildChartArea() {
-    return Stack(
-        //alignment: Alignment.topRight,
+  Widget buildChartLayout2(){
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        buildChartDetailsRow(),
+        buildSfCartesianChart()
+      ],
+    );
+  }
+
+  Widget buildChartDetailsRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
         children: [
-          buildSfCartesianChart(),
-          Align(
-            alignment: Alignment.topRight,
-              child: OhlcValueTextColumn()
-          ),
-          Positioned(
-              top: 5,
-              left: 5,
-              child: Text(
-                "BANKNIFTY INDEX OPTIONS\n${dataController.currentExpiry} | ${dataController.currentRight.toUpperCase()} | ${dataController.currentStrike}",
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              )),
-        ]);
+          Text(
+            "BANKNIFTY INDEX OPTIONS\n"
+                "${dataController.currentExpiry} | "
+                "${dataController.currentRight.toUpperCase()} | "
+                "${dataController.currentStrike}",
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            const Spacer(),
+            OhlcValueTextColumn(),
+          ],
+        ),
+    );
   }
 
   Widget buildSfCartesianChart() {
     return Obx(() {
-      return SfCartesianChart(
-        annotations: <CartesianChartAnnotation>[
-          CartesianChartAnnotation(
-              widget: Container(
-                  child: const Text('Text')
-              ),
-              coordinateUnit: CoordinateUnit.point,
-              // x position of annotation
-              x: DateTime.parse("2021-06-22 11:55:00.000"),
-              // y position of annotation
-              y: 900
-          )
-        ],
-        backgroundColor: Colors.white,
-        margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
-        tooltipBehavior: _tooltipBehavior,
-        onTrackballPositionChanging: (trackballArgs) {
-          // print("X pos is : ${trackballArgs.chartPointInfo.chartPoint?.x}");
-          // //todo find how to get the Y coordinate of the chart.
-          // print("Y pos is : ${trackballArgs.chartPointInfo.chartPoint?.high}");
-          trackballController.updateTrackballPoints(
-            trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-            trackballArgs.chartPointInfo.color!,
-            trackballArgs.chartPointInfo.dataPointIndex!
-            //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
-          );
-        },
-        trackballBehavior: _trackballBehavior,
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePinching: true,
-          maximumZoomLevel: 0.05,
-          enableMouseWheelZooming: true,
-          enablePanning: chartSettingController.enablePan.value,
-          enableSelectionZooming: true,
-          selectionRectBorderColor: Colors.red,
-          zoomMode: ZoomMode.xy,
-        ),
-        crosshairBehavior: _crosshairBehavior,
-        indicators: getIndicators(),
-        enableSideBySideSeriesPlacement: false,
-        series: [
-          // checks if user wants bar or candle type graph and selects the chart
-          chartSettingController.candleType.value == CandleType.bar
-          ? HiloOpenCloseSeries<OhlcDatum, DateTime>(
-            //enableTooltip: true,
-            name: "candle",
-              onPointTap: (cpd){
-                print(dataController.ohlcDataList[cpd.pointIndex!].volume);
-              },
-            animationDuration: 0.5,
-            dataSource: _initialData,
-            xValueMapper: (OhlcDatum data, _) => data.datetime,
-            lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
-            highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
-            openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
-            closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
-            //volumeValueMapper: (OhlcDatum data, _) => data.volume
-          )
-          : CandleSeries<OhlcDatum, DateTime>(
-            //enableTooltip: true,
-            name: "candle",
-            enableSolidCandles: true,
-            onPointTap: (cpd){
-              print(cpd.pointIndex);
-            },
-            animationDuration: 0.5,
-            dataSource: _initialData,
-            xValueMapper: (OhlcDatum data, _) => data.datetime,
-            lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
-            highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
-            openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
-            closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+      return Expanded(
+        child: SfCartesianChart(
+          backgroundColor: Colors.white,
+          // margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
+          tooltipBehavior: _tooltipBehavior,
+          onTrackballPositionChanging: (trackballArgs) {
+            trackballController.updateTrackballPoints(
+              trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+              trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+              trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+              trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+              trackballArgs.chartPointInfo.color!,
+              trackballArgs.chartPointInfo.dataPointIndex!
+            );
+          },
+          trackballBehavior: _trackballBehavior,
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePinching: true,
+            maximumZoomLevel: 0.05,
+            enableMouseWheelZooming: true,
+            enablePanning: chartSettingController.enablePan.value,
+            enableSelectionZooming: true,
+            selectionRectBorderColor: Colors.red,
+            zoomMode: ZoomMode.xy,
           ),
-        ],
-        primaryXAxis: buildDateTimeCategoryAxis(),
-        primaryYAxis: buildNumericAxis(),
+          crosshairBehavior: _crosshairBehavior,
+          indicators: getIndicators(),
+          enableSideBySideSeriesPlacement: false,
+          series: [
+            // checks if user wants bar or candle type graph and selects the chart
+            chartSettingController.candleType.value == CandleType.bar
+            ? HiloOpenCloseSeries<OhlcDatum, DateTime>(
+              //enableTooltip: true,
+              name: "candle",
+              animationDuration: 0.5,
+              dataSource: _initialData,
+              xValueMapper: (OhlcDatum data, _) => data.datetime,
+              lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
+              highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
+              openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
+              closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+            )
+
+            : CandleSeries<OhlcDatum, DateTime>(
+              //enableTooltip: true,
+              name: "candle",
+              enableSolidCandles: true,
+              animationDuration: 0.5,
+              dataSource: _initialData,
+              xValueMapper: (OhlcDatum data, _) => data.datetime,
+              lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
+              highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
+              openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
+              closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+            ),
+          ],
+          primaryXAxis: buildDateTimeCategoryAxis(),
+          primaryYAxis: buildNumericAxis(),
+        ),
       );
     }
     );
   }
+  ChartAxis buildDateTimeCategoryAxis() {
+    return DateTimeCategoryAxis(
+      edgeLabelPlacement: EdgeLabelPlacement.shift,
+      //labelIntersectAction: AxisLabelIntersectAction.hide,
+      labelAlignment: LabelAlignment.center,
+      initialZoomPosition: 1,
+      interactiveTooltip: const InteractiveTooltip(),
+      initialZoomFactor: 0.25,
+      intervalType: DateTimeIntervalType.auto,
+      dateFormat: DateFormat("d MMM ''yy HH:mm"),
+      majorGridLines: const MajorGridLines(width: 1),
+    );
+  }
+
+  ChartAxis buildNumericAxis() {
+    return NumericAxis(
+      opposedPosition: true,
+      numberFormat: NumberFormat.simpleCurrency(decimalDigits: 2),
+    );
+  }
 }
 
-ChartAxis buildDateTimeCategoryAxis() {
-  return DateTimeCategoryAxis(
-    edgeLabelPlacement: EdgeLabelPlacement.shift,
-    //labelIntersectAction: AxisLabelIntersectAction.hide,
-    labelAlignment: LabelAlignment.center,
-    initialZoomPosition: 1,
-    interactiveTooltip: const InteractiveTooltip(),
-    initialZoomFactor: 0.25,
-    intervalType: DateTimeIntervalType.auto,
-    dateFormat: DateFormat("d MMM ''yy HH:mm"),
-    majorGridLines: const MajorGridLines(width: 1),
-  );
-}
 
-ChartAxis buildNumericAxis() {
-  OptionDataController odController = Get.put(OptionDataController());
-  return NumericAxis(
-    opposedPosition: !(odController.isDeviceSmall.value),
-    numberFormat: NumberFormat.simpleCurrency(decimalDigits: 2),
-  );
+List<OhlcDatum> decreaseNumberOfCandles(){
+  OhlcDataController dataController = Get.put(OhlcDataController());
+  var temp = dataController.ohlcDataList.slices(1500).toList();
+  return temp[temp.length - 1];
 }
