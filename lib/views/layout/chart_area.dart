@@ -87,10 +87,13 @@ class _ChartAreaState extends State<ChartArea> {
 
   Widget buildChartArea() {
     return Stack(
-        alignment: Alignment.topRight,
+        //alignment: Alignment.topRight,
         children: [
           buildSfCartesianChart(),
-          OhlcValueTextColumn(),
+          Align(
+            alignment: Alignment.topRight,
+              child: OhlcValueTextColumn()
+          ),
           Positioned(
               top: 5,
               left: 5,
@@ -105,16 +108,32 @@ class _ChartAreaState extends State<ChartArea> {
   Widget buildSfCartesianChart() {
     return Obx(() {
       return SfCartesianChart(
+        annotations: <CartesianChartAnnotation>[
+          CartesianChartAnnotation(
+              widget: Container(
+                  child: const Text('Text')
+              ),
+              coordinateUnit: CoordinateUnit.point,
+              // x position of annotation
+              x: DateTime.parse("2021-06-22 11:55:00.000"),
+              // y position of annotation
+              y: 900
+          )
+        ],
         backgroundColor: Colors.white,
         margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
         tooltipBehavior: _tooltipBehavior,
         onTrackballPositionChanging: (trackballArgs) {
+          // print("X pos is : ${trackballArgs.chartPointInfo.chartPoint?.x}");
+          // //todo find how to get the Y coordinate of the chart.
+          // print("Y pos is : ${trackballArgs.chartPointInfo.chartPoint?.high}");
           trackballController.updateTrackballPoints(
             trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
             trackballArgs.chartPointInfo.color!,
+            trackballArgs.chartPointInfo.dataPointIndex!
             //trackballArgs.chartPointInfo.chartPoint!.volume.toString()....giving null value, no volume attached in chart.
           );
         },
@@ -137,6 +156,9 @@ class _ChartAreaState extends State<ChartArea> {
           ? HiloOpenCloseSeries<OhlcDatum, DateTime>(
             //enableTooltip: true,
             name: "candle",
+              onPointTap: (cpd){
+                print(dataController.ohlcDataList[cpd.pointIndex!].volume);
+              },
             animationDuration: 0.5,
             dataSource: _initialData,
             xValueMapper: (OhlcDatum data, _) => data.datetime,
@@ -144,11 +166,15 @@ class _ChartAreaState extends State<ChartArea> {
             highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
             openValueMapper: (OhlcDatum data, _) => double.parse(data.open),
             closeValueMapper: (OhlcDatum data, _) => double.parse(data.close),
+            //volumeValueMapper: (OhlcDatum data, _) => data.volume
           )
           : CandleSeries<OhlcDatum, DateTime>(
             //enableTooltip: true,
             name: "candle",
             enableSolidCandles: true,
+            onPointTap: (cpd){
+              print(cpd.pointIndex);
+            },
             animationDuration: 0.5,
             dataSource: _initialData,
             xValueMapper: (OhlcDatum data, _) => data.datetime,
