@@ -12,38 +12,41 @@ class OhlcValueTextColumn extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Obx(()=>
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
+          SizedBox(
+            width: 240,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text("O "),
+                      Text(trackballController.trackballOpen.value,
+                      style: TextStyle(color: trackballController.trackballColor.value)
+                      ),
+                      const Text(" H "),
+                      Text(trackballController.trackballHigh.value,
+                      style: TextStyle(color: trackballController.trackballColor.value)),
+                      const Text(" L "),
+                      Text(trackballController.trackballLow.value,
+                      style: TextStyle(color: trackballController.trackballColor.value)),
+                      const Text(" C "),
+                      Text(trackballController.trackballClose.value,
+                      style: TextStyle(color: trackballController.trackballColor.value)),
+                            ],
+                          ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(" O "),
-                    Text(trackballController.trackballOpen.value,
-                    style: TextStyle(color: trackballController.trackballColor.value)
-                    ),
-                    const Text(" H "),
-                    Text(trackballController.trackballHigh.value,
-                    style: TextStyle(color: trackballController.trackballColor.value)),
-                    const Text(" L "),
-                    Text(trackballController.trackballLow.value,
-                    style: TextStyle(color: trackballController.trackballColor.value)),
-                    const Text(" C "),
-                    Text(trackballController.trackballClose.value,
-                    style: TextStyle(color: trackballController.trackballColor.value)),
-                          ],
-                        ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Vol :${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
-                  const SizedBox(width: 10,),
-                  const Text(" Change: "),
-                  Text("${getPercentageChange(trackballController.trackballIndex.value)} %", style:TextStyle(color: trackballController.trackballColor.value))
-                ],
-              )
-            ],
+                    Text("Vol : ${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
+                    const Spacer(),
+                    const Text(" Change: "),
+                    Text("${getPercentageChange(trackballController.trackballIndex.value)} %", style:TextStyle(color: trackballController.trackballColor.value))
+                  ],
+                )
+              ],
+            ),
           ),
       ),
     );
