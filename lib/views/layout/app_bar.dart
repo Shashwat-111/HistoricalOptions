@@ -1,4 +1,7 @@
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:flutter/widgets.dart";
 import "package:fno_view/controllers/ohlc_data_controller.dart";
 import "package:fno_view/utils/constants.dart";
 import "package:get/get.dart";
@@ -126,15 +129,27 @@ class _MyAppBarState extends State<MyAppBar> {
         dataController.selectedStrike.value = null;
       }
 
-      return CustomDropdownButton(
-        initialMenuItems: dataController.strikePriceList,
-        labelText: "Select Strike",
-        hintText: "Select Strike",
-        width: 150,
-        value: dataController.selectedStrike.value, // Pass the value here
-        onChanged: (strike) {
-          dataController.selectedStrike(strike);
-        },
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          //display a circular progress indicator till strike price is fetched.
+          Visibility(
+              visible: dataController.isStrikeLoading.value,
+              child: const SizedBox(
+                  width: 15,
+                  height:15,
+                  child: CircularProgressIndicator())),
+          CustomDropdownButton(
+          initialMenuItems: dataController.strikePriceList,
+          labelText: "Select Strike",
+          hintText: "Select Strike",
+          width: 150,
+          value: dataController.selectedStrike.value, // Pass the value here
+          onChanged: (strike) {
+            dataController.selectedStrike(strike);
+          },
+        )
+        ],
       );
     });
   }
@@ -156,7 +171,12 @@ class _MyAppBarState extends State<MyAppBar> {
       onPressed: () {
         //todo display this snackbar on right top like in web
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
+              margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width *0.8,
+                bottom: MediaQuery.of(context).size.height *0.9,
+                right: 10,
+              ),
             behavior: SnackBarBehavior.floating,
             dismissDirection: DismissDirection.horizontal,
             content: Text("Only BankNifty Data Currently Available")));

@@ -29,6 +29,7 @@ class OhlcDataController extends GetxController {
   var ohlcDataListOriginal = <OhlcDatum>[].obs;
 
   var isLoading = false.obs;
+  var isStrikeLoading = false.obs;
   var expiryDateList = <String>[].obs;
 
   @override
@@ -51,6 +52,7 @@ class OhlcDataController extends GetxController {
   //for now it is reducing the the list of strike price to first 4, as only
   //that data is currently available.
   getStrikePriceData({required String expiry, required String right}) async {
+    isStrikeLoading.value = true;
     var response = await RemoteService().getStrikePriceList(expiry, right);
     if(expiry=="29-Jul-2021" && right=="put") {
       strikePriceList.value =
@@ -58,6 +60,7 @@ class OhlcDataController extends GetxController {
     } else {
       strikePriceList.value =
           response.map((e) => e.strikes.toString()).toList().sublist(0, 5);}
+    isStrikeLoading.value = false;
   }
 
   // after getting all required input from user, this
