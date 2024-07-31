@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/ohlc_data_controller.dart';
+import '../../controllers/trackball_controller.dart';
+import '../../utils/convert_timeframe_to_minutes.dart';
 
 class TimeFrameSelectorButton extends StatefulWidget {
   const TimeFrameSelectorButton({super.key});
@@ -11,13 +17,13 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
   String selectedValue = "1m";
   Map<String, VoidCallback> timeFrameWithFunction = {
     "1m" : (){
-      //todo add logic to change the candle timeframe
+      changeTimeFrame(CandleTimeFrame.oneMinute);
     },
     "5m" : (){
-
+      changeTimeFrame(CandleTimeFrame.fiveMinute);
     },
     "15m" : (){
-
+      changeTimeFrame(CandleTimeFrame.fifteenMinute);
     },
   };
   @override
@@ -45,4 +51,19 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
       ),
     );
   }
+}
+
+changeTimeFrame(CandleTimeFrame candleTimeFrame){
+  OhlcDataController dataController = Get.put(OhlcDataController());
+  ChartSettingController chartSettingController = Get.put(ChartSettingController());
+  TrackballController trackballController = Get.put(TrackballController());
+  chartSettingController.updateCandleTimeFrame(candleTimeFrame);
+
+  //this is required as when timeFrame changes it may happen that the previous
+  // index is now out-of-bound for the new timeframe, so making it to zero on change.
+  trackballController.trackballIndex.value = 0;
+
+  int timeFrame = convertTimeFrameToMinutes(
+      chartSettingController.selectedCandleTimeFrame.value);
+  aggregateOHLC(dataController.ohlcDataListOriginal, timeFrame);
 }

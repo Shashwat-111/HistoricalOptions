@@ -1,10 +1,12 @@
-int convertTimeFrameToMinutes(String timeFrame) {
+import 'package:fno_view/controllers/chart_setting_controller.dart';
+
+int convertTimeFrameToMinutes(CandleTimeFrame timeFrame) {
   switch (timeFrame) {
-    case '1m':
+    case CandleTimeFrame.oneMinute:
       return 1;
-    case '5m':
+    case CandleTimeFrame.fiveMinute:
       return 5;
-    case '15m':
+    case CandleTimeFrame.fifteenMinute:
       return 15;
     default:
       throw ArgumentError('Unsupported time frame: $timeFrame');
