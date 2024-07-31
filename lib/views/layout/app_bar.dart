@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:fno_view/controllers/ohlc_data_controller.dart";
 import "package:fno_view/utils/constants.dart";
 import "package:get/get.dart";
+import "../../controllers/indicator_controller.dart";
 import "../widgets/Indicator_dialog_box.dart";
 import "../widgets/custom_dropdown_button.dart";
 import "../widgets/my_text_icon_button.dart";

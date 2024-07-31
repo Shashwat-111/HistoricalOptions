@@ -1,11 +1,11 @@
+import 'package:fno_view/controllers/indicator_controller.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../controllers/option_controller.dart';
 
 List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
-  OptionDataController odController = Get.put(OptionDataController());
-  var selectedIndicators = odController.selectedIndicators;
-  //print(selectedIndicators);
+  IndicatorController indicatorController = Get.put(IndicatorController());
+  var selectedIndicators = indicatorController.selectedIndicators;
+
   List<TechnicalIndicator<dynamic, dynamic>> indicators = [];
   String name = "candle";
   if (selectedIndicators[0]) {
@@ -44,6 +44,5 @@ List<TechnicalIndicator<dynamic, dynamic>> getIndicators() {
   if (selectedIndicators[11]) {
     indicators.add(WmaIndicator<dynamic, dynamic>(period: 5, seriesName: name));
   }
-
   return indicators;
 }

@@ -11,7 +11,6 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  OptionDataController odController = Get.put(OptionDataController());
 
   @override
   Widget build(BuildContext context) {

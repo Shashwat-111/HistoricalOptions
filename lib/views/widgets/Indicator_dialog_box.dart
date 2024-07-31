@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../controllers/indicator_controller.dart';
 import '../../controllers/option_controller.dart';
 
 class IndicatorDialogBox extends StatefulWidget {
@@ -17,7 +18,7 @@ class _IndicatorDialogBoxState extends State<IndicatorDialogBox> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        child: Container(
+        child: SizedBox(
           width: 500,
           child: widget.child));
   }
@@ -30,7 +31,7 @@ class IndicatorSelectorArea extends StatelessWidget {
   });
 
   final List<String> indicators;
-  final OptionDataController odController = Get.put(OptionDataController());
+  IndicatorController indicatorController = Get.put(IndicatorController());
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -43,10 +44,10 @@ class IndicatorSelectorArea extends StatelessWidget {
               child: Obx(
                     ()=> CheckboxListTile(
                     title: Text(indicators[n]),
-                    value: odController.selectedIndicators[n],
+                    value: indicatorController.selectedIndicators[n],
                     onChanged: (bool? isSelected){
                       //print("index $n bool value: $isSelected");
-                      odController.updateSelectedIndicator(n, isSelected);
+                      indicatorController.updateSelectedIndicator(n, isSelected);
                     }),
               ),
             );
@@ -54,18 +55,3 @@ class IndicatorSelectorArea extends StatelessWidget {
     );
   }
 }
-
-List<String> supportedIndicatorList = [
-  "Bollinger Band",
-  "Relative Strength Index (RSI)",
-  "Simple Moving Average (SMA)",
-  "Exponential Moving Average (EMA)",
-  "Moving Average Convergence Divergence (MACD)",
-  "Average True Range (ATR)",
-  "Momentum",
-  "Stochastic",
-  "Accumulation Distribution (AD)",
-  "Triangular Moving Average (TMA)",
-  "Rate of Change (ROC)",
-  "Weighted Moving Average (WMA)"
-];
