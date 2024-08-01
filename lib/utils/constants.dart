@@ -10,3 +10,4 @@ const double mobileWidth = 950;
 
 Color barColor = Colors.white;
 Color chartBgColor = Colors.white;
+Color highlightedColor = Colors.grey[200]!;

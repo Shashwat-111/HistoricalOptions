@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:fno_view/views/responsive/responsive.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/trackball_controller.dart';
+import '../../utils/constants.dart';
 import '../../utils/convert_timeframe_to_minutes.dart';
 
 class TimeFrameSelectorButton extends StatefulWidget {
@@ -28,25 +30,48 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
   };
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobileBody: mobileButton(),
+      desktopBody: desktopButton(),
+    );
+  }
+
+  Widget mobileButton(){
+    return IconButton(
+        onPressed: (){
+          setState(() {
+            switch(selectedValue){
+              case "1m" : selectedValue = "5m";
+              case "5m" : selectedValue = "15m";
+              case "15m" : selectedValue = "1m";
+            }
+            timeFrameWithFunction[selectedValue]!();
+          });
+        },
+        icon: Text(selectedValue,style: TextStyle(fontWeight: FontWeight.w500),)
+    );
+  }
+
+  Widget desktopButton(){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         width: timeFrameWithFunction.keys.length*40,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: timeFrameWithFunction.keys.map((time) => GestureDetector(
-            onTap: (){
-              timeFrameWithFunction[time]!();
-              setState(() {
-                selectedValue = time;
-              });
-            },
-            child: Container(
-              height: 30,
-              width: 40,
-              decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: const BorderRadius.all(Radius.circular(8)),color: selectedValue == time ? Colors.grey[200] : Colors.white),
-              child: Center(child: Text(time, style: TextStyle(fontWeight: selectedValue == time ? FontWeight.bold : null))),
-            ))).toList()
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: timeFrameWithFunction.keys.map((time) => GestureDetector(
+                onTap: (){
+                  timeFrameWithFunction[time]!();
+                  setState(() {
+                    selectedValue = time;
+                  });
+                },
+                child: Container(
+                  height: 30,
+                  width: 40,
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: const BorderRadius.all(Radius.circular(8)),color: selectedValue == time ? highlightedColor : barColor),
+                  child: Center(child: Text(time, style: TextStyle(fontWeight: selectedValue == time ? FontWeight.bold : null))),
+                ))).toList()
         ),
       ),
     );
