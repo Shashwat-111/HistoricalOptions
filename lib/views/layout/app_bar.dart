@@ -1,9 +1,7 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/rendering.dart";
-import "package:flutter/widgets.dart";
 import "package:fno_view/controllers/ohlc_data_controller.dart";
 import "package:fno_view/utils/constants.dart";
+import "package:fno_view/views/responsive/responsive.dart";
 import "package:get/get.dart";
 import "../../controllers/indicator_controller.dart";
 import "../widgets/indicator_dialog_box.dart";
@@ -22,27 +20,48 @@ class _MyAppBarState extends State<MyAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-          children: [
-            profilePictureMenuButton(),
-            searchButton(),
-            verticalDivider(),
-            const SizedBox(width: 10),
-            expiryDropdown(),
-            const SizedBox(width: 10),
-            rightDropdown(),
-            const SizedBox(width: 10),
-            strikeDropdown(),
-            const SizedBox(width: 10),
-            refreshButton(),
-            const SizedBox(width: 10),
-            verticalDivider(),
-            const SizedBox(width: 10),
-            indicatorsButton(),
-            const Spacer(),
-            notificationButton()
-          ],
-        );
+    return ResponsiveLayout(
+      desktopBody: Row(
+            children: [
+              profilePictureMenuButton(),
+              searchButton(),
+              verticalDivider(),
+              const SizedBox(width: 10),
+              expiryDropdown(),
+              const SizedBox(width: 10),
+              rightDropdown(),
+              const SizedBox(width: 10),
+              strikeDropdown(),
+              const SizedBox(width: 10),
+              refreshButton(),
+              const SizedBox(width: 10),
+              verticalDivider(),
+              const SizedBox(width: 10),
+              indicatorsButton(),
+              const Spacer(),
+              notificationButton()
+            ],
+          ),
+
+      mobileBody: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              profilePictureMenuButton(),
+              verticalDivider(),
+              MyTextIconButton(icon: Icons.add, text: "New Chart", onPressed: (){}),
+              verticalDivider(),
+              indicatorsButton(),
+              verticalDivider(),
+              // const Spacer(),
+              // notificationButton()
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget refreshButton() {
@@ -179,7 +198,7 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
             behavior: SnackBarBehavior.floating,
             dismissDirection: DismissDirection.horizontal,
-            content: Text("Only BankNifty Data Currently Available")));
+            content: const Text("Only BankNifty Data Currently Available")));
       },
     );
   }

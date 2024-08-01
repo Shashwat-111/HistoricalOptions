@@ -1,12 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:fno_view/views/responsive/responsive.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/trackball_controller.dart';
 import '../../models/graph_data_class.dart';
+import '../../utils/constants.dart';
 import '../../utils/get_indicator_function.dart';
 import '../widgets/ohlc_text_display_row.dart';
 
@@ -89,18 +91,28 @@ class _ChartAreaState extends State<ChartArea> {
   Widget buildChartDetailsRow() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Row(
-        children: [
-          Text(
-            "BANKNIFTY INDEX OPTIONS\n"
-                "${dataController.currentExpiry} | "
-                "${dataController.currentRight.toUpperCase()} | "
-                "${dataController.currentStrike}",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+      child: ResponsiveLayout(
+        //just showing the trackball value on mobile device.
+        mobileBody: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            OhlcValueTextColumn(),
+          ],
+        ),
+
+        desktopBody: Row(
+          children: [
+            Text(
+                "BANKNIFTY INDEX OPTIONS\n"
+                    "${dataController.currentExpiry} | "
+                    "${dataController.currentRight.toUpperCase()} | "
+                    "${dataController.currentStrike}",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             const Spacer(),
             OhlcValueTextColumn(),
           ],
         ),
+      )
     );
   }
 
@@ -108,7 +120,7 @@ class _ChartAreaState extends State<ChartArea> {
     return Obx(() {
       return Expanded(
         child: SfCartesianChart(
-          backgroundColor: Colors.white,
+          backgroundColor: chartBgColor,
           // margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
           tooltipBehavior: _tooltipBehavior,
           onTrackballPositionChanging: (trackballArgs) {
@@ -185,7 +197,7 @@ class _ChartAreaState extends State<ChartArea> {
 
   ChartAxis buildNumericAxis() {
     return NumericAxis(
-      opposedPosition: true,
+      opposedPosition: false,
       numberFormat: NumberFormat.simpleCurrency(decimalDigits: 2),
     );
   }

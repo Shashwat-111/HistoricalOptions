@@ -9,46 +9,40 @@ class OhlcValueTextColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Obx(()=>
-          SizedBox(
-            width: 240,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Obx(()=>
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text("O "),
-                      Text(trackballController.trackballOpen.value,
-                      style: TextStyle(color: trackballController.trackballColor.value)
-                      ),
-                      const Text(" H "),
-                      Text(trackballController.trackballHigh.value,
-                      style: TextStyle(color: trackballController.trackballColor.value)),
-                      const Text(" L "),
-                      Text(trackballController.trackballLow.value,
-                      style: TextStyle(color: trackballController.trackballColor.value)),
-                      const Text(" C "),
-                      Text(trackballController.trackballClose.value,
-                      style: TextStyle(color: trackballController.trackballColor.value)),
-                            ],
-                          ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Vol : ${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
-                    const Spacer(),
-                    const Text(" Change: "),
-                    Text("${getPercentageChange(trackballController.trackballIndex.value)} %", style:TextStyle(color: trackballController.trackballColor.value))
-                  ],
-                )
+                const Text("O "),
+                Text(trackballController.trackballOpen.value,
+                    style: TextStyle(color: trackballController.trackballColor.value)
+                ),
+                const Text(" H "),
+                Text(trackballController.trackballHigh.value,
+                    style: TextStyle(color: trackballController.trackballColor.value)),
+                const Text(" L "),
+                Text(trackballController.trackballLow.value,
+                    style: TextStyle(color: trackballController.trackballColor.value)),
+                const Text(" C "),
+                Text(trackballController.trackballClose.value,
+                    style: TextStyle(color: trackballController.trackballColor.value)),
               ],
             ),
-          ),
-      ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Change: "),
+                Text("${getPercentageChange(trackballController.trackballIndex.value)} %  ", style:TextStyle(color: trackballController.trackballColor.value)),
+                const SizedBox(width: 8,),
+                Text("Vol : ${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
+              ],
+            )
+          ],
+        ),
     );
   }
 }
@@ -63,7 +57,12 @@ String getPercentageChange(int currentIndex){
   if(currentIndex!=0){
     var previousClose =double.parse(dataController.ohlcDataList[currentIndex-1].close);
     var currentClose =double.parse(dataController.ohlcDataList[currentIndex].close);
-    return (((previousClose-currentClose)/previousClose)*100).toStringAsFixed(2);
+    var percentChange = (((previousClose-currentClose)/previousClose)*100).toPrecision(2);
+    if (percentChange<0) {
+      return percentChange.toStringAsFixed(2);
+    } else {
+      return "+${percentChange.toStringAsFixed(2)}";
+    }
   } else {
     return "-";
   }
