@@ -20,9 +20,7 @@ class MobileBody extends StatelessWidget {
         ),
 
         ///rest of the body except appBar
-        SizedBox(
-          height: MediaQuery.of(context).size.height -
-              appBarHeight*2,
+        Expanded(
           child: Row(
             children: [
               ///left Side Bar
