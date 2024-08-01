@@ -135,13 +135,13 @@ class _ChartAreaState extends State<ChartArea> {
           },
           trackballBehavior: _trackballBehavior,
           zoomPanBehavior: ZoomPanBehavior(
-            enablePinching: true,
+            //enablePinching: true,
             maximumZoomLevel: 0.05,
             enableMouseWheelZooming: true,
             enablePanning: chartSettingController.enablePan.value,
             enableSelectionZooming: true,
             selectionRectBorderColor: Colors.red,
-            zoomMode: ZoomMode.xy,
+            zoomMode: ZoomMode.x,
           ),
           crosshairBehavior: _crosshairBehavior,
           indicators: getIndicators(),
@@ -188,7 +188,8 @@ class _ChartAreaState extends State<ChartArea> {
       labelAlignment: LabelAlignment.center,
       initialZoomPosition: 1,
       interactiveTooltip: const InteractiveTooltip(),
-      initialZoomFactor: 0.25,
+      // initialZoomFactor: 0.25,
+      initialZoomFactor: initialZoomFactor,
       intervalType: DateTimeIntervalType.auto,
       dateFormat: DateFormat("d MMM ''yy HH:mm"),
       majorGridLines: const MajorGridLines(width: 1),
@@ -197,8 +198,11 @@ class _ChartAreaState extends State<ChartArea> {
 
   ChartAxis buildNumericAxis() {
     return NumericAxis(
+      initialVisibleMaximum: getGlobalHigh(_initialData),
+      initialVisibleMinimum: getGlobalLowest(_initialData),
+      anchorRangeToVisiblePoints: true,
       opposedPosition: false,
-      numberFormat: NumberFormat.simpleCurrency(decimalDigits: 2),
+      numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
     );
   }
 }
@@ -206,6 +210,35 @@ class _ChartAreaState extends State<ChartArea> {
 
 List<OhlcDatum> decreaseNumberOfCandles(){
   OhlcDataController dataController = Get.put(OhlcDataController());
-  var temp = dataController.ohlcDataList.slices(1500).toList();
+  var temp = dataController.ohlcDataList.slices(500).toList();
   return temp[temp.length - 1];
+}
+
+//include this in init
+double getGlobalHigh (List list) {
+  var tempList = list;
+  int highestValuesIndex = 0;
+  for (int i = 1;i<tempList.length;i++){
+    bool isHigh = double.parse(tempList[i].high) > double.parse(tempList[highestValuesIndex].high);
+    if(isHigh){
+      highestValuesIndex = i;
+    }
+  }
+  print("highest is at index $highestValuesIndex with value ${tempList[highestValuesIndex].high}");
+  //increase the returned value by 20%, for padding
+  return double.parse(tempList[highestValuesIndex].high)*1.2;
+}
+
+double getGlobalLowest(List list){
+  var tempList = list;
+  int lowestValuesIndex = 0;
+  for (int i = 1;i<tempList.length;i++){
+    bool isLower = double.parse(tempList[i].low) < double.parse(tempList[lowestValuesIndex].low);
+    if(isLower){
+      lowestValuesIndex = i;
+    }
+  }
+  print("lowest is at index $lowestValuesIndex with value ${tempList[lowestValuesIndex].low}");
+  //increase the returned value by 20%, for padding
+  return double.parse(tempList[lowestValuesIndex].low)*1.2;
 }
