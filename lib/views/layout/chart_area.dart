@@ -120,7 +120,7 @@ class _ChartAreaState extends State<ChartArea> {
     return Obx(() {
       return Expanded(
         child: SfCartesianChart(
-          backgroundColor: chartBgColor,
+          backgroundColor: Theme.of(context).canvasColor,
           // margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
           tooltipBehavior: _tooltipBehavior,
           onTrackballPositionChanging: (trackballArgs) {
@@ -150,6 +150,8 @@ class _ChartAreaState extends State<ChartArea> {
             // checks if user wants bar or candle type graph and selects the chart
             chartSettingController.candleType.value == CandleType.bar
             ? HiloOpenCloseSeries<OhlcDatum, DateTime>(
+              bearColor: const Color.fromRGBO(242, 54, 69,1),
+              bullColor: const Color.fromRGBO(8, 153, 129,1),
               //enableTooltip: true,
               name: "candle",
               animationDuration: 0.5,
@@ -162,6 +164,8 @@ class _ChartAreaState extends State<ChartArea> {
             )
 
             : CandleSeries<OhlcDatum, DateTime>(
+              bearColor: const Color.fromRGBO(242, 54, 69,1),
+              bullColor: const Color.fromRGBO(8, 153, 129,1),
               //enableTooltip: true,
               name: "candle",
               enableSolidCandles: true,

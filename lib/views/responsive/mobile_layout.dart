@@ -9,6 +9,7 @@ class MobileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color barColor = Theme.of(context).primaryColor;
     return Column(
       children: [
         ///app bar
@@ -39,7 +40,7 @@ class MobileBody extends StatelessWidget {
                 height: MediaQuery.of(context).size.height -
                     (appBarHeight) -
                     (defaultPadding),
-                color: barColor,
+                color: Theme.of(context).canvasColor,
                 child: const ChartArea(),
               ),
             ],

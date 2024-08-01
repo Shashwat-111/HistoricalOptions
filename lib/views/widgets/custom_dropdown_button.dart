@@ -46,7 +46,6 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
               ? widget.value
               : null,
           decoration: InputDecoration(
-            labelStyle: const TextStyle(fontSize: 12),
             labelText: widget.labelText,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             contentPadding: const EdgeInsets.symmetric(vertical: 2),

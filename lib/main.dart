@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/utils/constants.dart';
+import 'package:fno_view/utils/theme.dart';
 import 'package:fno_view/views/responsive/desktop_layout.dart';
 import 'package:fno_view/views/responsive/mobile_layout.dart';
 import 'package:fno_view/views/responsive/responsive.dart';
@@ -6,7 +8,18 @@ import 'package:get/get.dart';
 import 'controllers/theme_controller.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      Obx((){
+        ThemeController themeController = Get.put(ThemeController());
+        return MaterialApp(
+          home: const MyApp(),
+          theme: themeController.currentTheme.value,
+          //darkTheme: darkTheme,
+          debugShowCheckedModeBanner: false,
+        );
+      }
+  )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -20,22 +33,14 @@ class _MyAppState extends State<MyApp> {
   ThemeController themeController = Get.put(ThemeController());
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      ()=> MaterialApp(
-        theme: themeController.currentTheme.value,
-        title: "Historical Options",
-        debugShowCheckedModeBanner: false,
-        home: SafeArea(
+    return const SafeArea(
           child: Scaffold(
-            backgroundColor: Colors.grey[700],
-            body: const ResponsiveLayout(
+            body: ResponsiveLayout(
               mobileBody: MobileBody(),
               desktopBody: DesktopBody(),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }
 

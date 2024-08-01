@@ -9,9 +9,9 @@ import '../layout/right_sidebar.dart';
 
 class DesktopBody extends StatelessWidget {
   const DesktopBody({super.key});
-
   @override
   Widget build(BuildContext context) {
+    Color barColor = Theme.of(context).primaryColor;
     return Column(
       children: [
         ///app bar
@@ -48,7 +48,7 @@ class DesktopBody extends StatelessWidget {
                     height: MediaQuery.of(context).size.height -
                         (appBarHeight + bottomBarHeight) -
                         (defaultPadding * 2),
-                    color: chartBgColor,
+                    color: Theme.of(context).canvasColor,
                     child: const Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [

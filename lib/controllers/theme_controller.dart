@@ -12,7 +12,7 @@ class ThemeController extends GetxController {
   var currentTheme = lightTheme.obs;
 
   // to check the current theme
-  var isDarkMode = true.obs;
+  var isDarkMode = false.obs;
 
   //switches the theme to the desired mode
   void switchTheme(AppThemeMode themeMode){

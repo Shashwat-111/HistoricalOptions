@@ -222,7 +222,7 @@ class _MyAppBarState extends State<MyAppBar> {
     );
   }
 
-  Widget notificationButton() => const SizedBox(width: sideBarWidth,child: Icon(Icons.notifications_none_sharp),);
+  Widget notificationButton() => SizedBox(width: sideBarWidth,child: IconButton(icon: const Icon(Icons.notifications_none_sharp),onPressed: (){},),);
 
   Widget indicatorsButton()
   => MyTextIconButton(

@@ -69,7 +69,7 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
                 child: Container(
                   height: 30,
                   width: 40,
-                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: const BorderRadius.all(Radius.circular(8)),color: selectedValue == time ? highlightedColor : barColor),
+                  decoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: const BorderRadius.all(Radius.circular(8)),color: selectedValue == time ? Theme.of(context).highlightColor : Theme.of(context).primaryColor),
                   child: Center(child: Text(time, style: TextStyle(fontWeight: selectedValue == time ? FontWeight.bold : null))),
                 ))).toList()
         ),

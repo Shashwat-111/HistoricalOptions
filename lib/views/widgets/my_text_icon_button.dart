@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/utils/theme.dart';
 
 class MyTextIconButton extends StatelessWidget {
   final IconData icon;
@@ -9,15 +10,7 @@ class MyTextIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        style: ButtonStyle(
-          iconColor: WidgetStateProperty.all(Colors.black),
-          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(8),
-            side: const BorderSide(color: Colors.white),
-          )),
-        ),
+        style: ButtonStyle(),
         onPressed: onPressed,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,7 +18,7 @@ class MyTextIconButton extends StatelessWidget {
           children: [
             Icon(icon),
             const SizedBox(width: 5),
-            Text(text, style: const TextStyle(color: Colors.black),),
+            Text(text, style: Theme.of(context).textTheme.displayMedium,),
           ],
         ));
   }
