@@ -1,12 +1,15 @@
 import "package:flutter/material.dart";
 import "package:fno_view/controllers/ohlc_data_controller.dart";
 import "package:fno_view/utils/constants.dart";
+import "package:fno_view/utils/custom_popup_function.dart";
 import "package:fno_view/views/responsive/responsive.dart";
 import "package:get/get.dart";
+import "package:popover/popover.dart";
 import "../../controllers/indicator_controller.dart";
 import "../widgets/indicator_dialog_box.dart";
 import "../widgets/custom_dropdown_button.dart";
 import "../widgets/my_text_icon_button.dart";
+import "../widgets/profile_icon_button.dart";
 
 class MyAppBar extends StatefulWidget {
   const MyAppBar({super.key});
@@ -23,7 +26,7 @@ class _MyAppBarState extends State<MyAppBar> {
     return ResponsiveLayout(
       desktopBody: Row(
             children: [
-              profilePictureMenuButton(),
+              const ProfileIcon(),
               searchButton(),
               verticalDivider(),
               const SizedBox(width: 10),
@@ -49,9 +52,33 @@ class _MyAppBarState extends State<MyAppBar> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              profilePictureMenuButton(),
+              const ProfileIcon(),
               verticalDivider(),
-              MyTextIconButton(icon: Icons.add, text: "New Chart", onPressed: (){}),
+              MyTextIconButton(
+                  icon: Icons.add,
+                  text: "New Chart",
+                  onPressed: (){
+                    customPopup(
+                        context: context,
+                        child: SizedBox(
+                          height: 300,
+                          width: 200,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const SizedBox(width: 20),
+                              expiryDropdown(),
+                              const SizedBox(width: 20),
+                              rightDropdown(),
+                              const SizedBox(width: 20),
+                              strikeDropdown(),
+                              const SizedBox(width: 20),
+                              refreshButton(),
+                              const SizedBox(width: 20),
+                        ],
+                      ),
+                    ),direction: PopoverDirection.bottom);
+                  }),
               verticalDivider(),
               indicatorsButton(),
               verticalDivider(),
@@ -200,25 +227,6 @@ class _MyAppBarState extends State<MyAppBar> {
             dismissDirection: DismissDirection.horizontal,
             content: const Text("Only BankNifty Data Currently Available")));
       },
-    );
-  }
-
-  Widget profilePictureMenuButton() {
-    return SizedBox(
-      width: sideBarWidth,
-      child: Center(
-        child: CircleAvatar(
-          radius: ((appBarHeight / 2) - 5),
-          backgroundColor: Colors.green[400],
-          child: const Text(
-            "S",
-            style: TextStyle(
-                fontSize: (appBarHeight / 2),
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
-          ),
-        ),
-      ),
     );
   }
 
