@@ -13,7 +13,13 @@ class ProfileIcon extends StatelessWidget {
         showCustomPopup(
             context: context,
             title: "Profile",
-            child: Container(height: 300,width: 300,));
+            child: const ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.person_2_sharp,size: 34,),
+              ),
+              title: Text("Shashwat Dubey"),
+              subtitle: Text("shashwatdubey111@gmail.com"),
+            ));
       },
       child: SizedBox(
         width: sideBarWidth,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
 import 'package:fno_view/utils/constants.dart';
+import 'package:fno_view/views/widgets/settings_icon_button.dart';
 import 'package:get/get.dart';
 
 import '../widgets/theme_switch_button.dart';
@@ -23,10 +24,7 @@ class _LeftSidebarState extends State<LeftSidebar> {
         if(isMobile)
           ThemeSwitchButton(),
         if(isMobile)
-         IconButton(
-            onPressed: () {},
-            tooltip: "settings",
-            icon: const Icon(Icons.settings_sharp)),
+         SettingsIconButton(),
         if(isMobile)
           const TimeFrameSelectorButton(),
         buildIconButton(),
