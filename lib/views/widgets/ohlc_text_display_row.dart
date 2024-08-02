@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fno_view/controllers/ohlc_data_controller.dart';
+import 'package:fno_view/utils/helper_functions.dart';
 import 'package:get/get.dart';
 import '../../controllers/trackball_controller.dart';
 
@@ -36,34 +36,13 @@ class OhlcValueTextColumn extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text("Change: "),
-                Text("${getPercentageChange(trackballController.trackballIndex.value)} %  ", style:TextStyle(color: trackballController.trackballColor.value)),
+                Text("${HelperFunctions.getPercentageChange(trackballController.trackballIndex.value)} %  ", style:TextStyle(color: trackballController.trackballColor.value)),
                 const SizedBox(width: 8,),
-                Text("Vol : ${getVolumeFromIndex(trackballController.trackballIndex.value)}"),
+                Text("Vol : ${HelperFunctions.getVolumeFromIndex(trackballController.trackballIndex.value)}"),
               ],
             )
           ],
         ),
     );
-  }
-}
-
-int getVolumeFromIndex(int index){
-  OhlcDataController dataController = Get.put(OhlcDataController());
-  return dataController.ohlcDataList[index].volume;
-}
-
-String getPercentageChange(int currentIndex){
-  OhlcDataController dataController = Get.put(OhlcDataController());
-  if(currentIndex!=0){
-    var previousClose =double.parse(dataController.ohlcDataList[currentIndex-1].close);
-    var currentClose =double.parse(dataController.ohlcDataList[currentIndex].close);
-    var percentChange = (((previousClose-currentClose)/previousClose)*100).toPrecision(2);
-    if (percentChange<0) {
-      return percentChange.toStringAsFixed(2);
-    } else {
-      return "+${percentChange.toStringAsFixed(2)}";
-    }
-  } else {
-    return "-";
   }
 }

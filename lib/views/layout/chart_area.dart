@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:fno_view/utils/helper_functions.dart';
 import 'package:fno_view/views/responsive/responsive.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +10,6 @@ import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/trackball_controller.dart';
 import '../../models/graph_data_class.dart';
 import '../../utils/constants.dart';
-import '../../utils/get_indicator_function.dart';
 import '../widgets/ohlc_text_display_row.dart';
 
 class ChartArea extends StatefulWidget {
@@ -144,7 +144,7 @@ class _ChartAreaState extends State<ChartArea> {
             zoomMode: ZoomMode.x,
           ),
           crosshairBehavior: _crosshairBehavior,
-          indicators: getIndicators(),
+          indicators: HelperFunctions.getIndicators(),
           enableSideBySideSeriesPlacement: false,
           series: [
             // checks if user wants bar or candle type graph and selects the chart
@@ -202,8 +202,8 @@ class _ChartAreaState extends State<ChartArea> {
 
   ChartAxis buildNumericAxis() {
     return NumericAxis(
-      initialVisibleMaximum: getGlobalHigh(_initialData),
-      initialVisibleMinimum: getGlobalLowest(_initialData),
+      initialVisibleMaximum: HelperFunctions.getGlobalHigh(_initialData),
+      initialVisibleMinimum: HelperFunctions.getGlobalLowest(_initialData),
       anchorRangeToVisiblePoints: true,
       opposedPosition: false,
       numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
@@ -216,33 +216,4 @@ List<OhlcDatum> decreaseNumberOfCandles(){
   OhlcDataController dataController = Get.put(OhlcDataController());
   var temp = dataController.ohlcDataList.slices(500).toList();
   return temp[temp.length - 1];
-}
-
-//include this in init
-double getGlobalHigh (List list) {
-  var tempList = list;
-  int highestValuesIndex = 0;
-  for (int i = 1;i<tempList.length;i++){
-    bool isHigh = double.parse(tempList[i].high) > double.parse(tempList[highestValuesIndex].high);
-    if(isHigh){
-      highestValuesIndex = i;
-    }
-  }
-  print("highest is at index $highestValuesIndex with value ${tempList[highestValuesIndex].high}");
-  //increase the returned value by 20%, for padding
-  return double.parse(tempList[highestValuesIndex].high)*1.2;
-}
-
-double getGlobalLowest(List list){
-  var tempList = list;
-  int lowestValuesIndex = 0;
-  for (int i = 1;i<tempList.length;i++){
-    bool isLower = double.parse(tempList[i].low) < double.parse(tempList[lowestValuesIndex].low);
-    if(isLower){
-      lowestValuesIndex = i;
-    }
-  }
-  print("lowest is at index $lowestValuesIndex with value ${tempList[lowestValuesIndex].low}");
-  //increase the returned value by 20%, for padding
-  return double.parse(tempList[lowestValuesIndex].low)*1.2;
 }

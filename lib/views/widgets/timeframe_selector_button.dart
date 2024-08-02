@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
+import 'package:fno_view/utils/helper_functions.dart';
 import 'package:fno_view/views/responsive/responsive.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/ohlc_data_controller.dart';
 import '../../controllers/trackball_controller.dart';
-import '../../utils/constants.dart';
-import '../../utils/convert_timeframe_to_minutes.dart';
 
 class TimeFrameSelectorButton extends StatefulWidget {
   const TimeFrameSelectorButton({super.key});
@@ -88,7 +87,7 @@ changeTimeFrame(CandleTimeFrame candleTimeFrame){
   // index is now out-of-bound for the new timeframe, so making it to zero on change.
   trackballController.trackballIndex.value = 0;
 
-  int timeFrame = convertTimeFrameToMinutes(
+  int timeFrame = HelperFunctions.convertTimeFrameToMinutes(
       chartSettingController.selectedCandleTimeFrame.value);
   aggregateOHLC(dataController.ohlcDataListOriginal, timeFrame);
 }
