@@ -23,44 +23,11 @@ class _ChartAreaState extends State<ChartArea> {
   OhlcDataController dataController = Get.put(OhlcDataController());
   ChartSettingController chartSettingController = Get.put(ChartSettingController());
   TrackballController trackballController = Get.put(TrackballController());
-
-  late TrackballBehavior _trackballBehavior;
-  // late ZoomPanBehavior _zoomPanBehavior;
-  late CrosshairBehavior _crosshairBehavior;
-  late TooltipBehavior _tooltipBehavior;
   late List<OhlcDatum> currentlyDisplayedOHLC;
   ChartSeriesController? seriesController;
 
   @override
   void initState() {
-    _crosshairBehavior = CrosshairBehavior(
-      enable: true,
-      lineWidth: 0.5,
-      lineDashArray: [5, 5],
-      shouldAlwaysShow: true,
-      lineType: CrosshairLineType.horizontal,
-      activationMode: ActivationMode.singleTap,
-    );
-    _trackballBehavior = TrackballBehavior(
-      tooltipDisplayMode: TrackballDisplayMode
-          .none, //use floatAllPoints to display the trackball,
-      enable: true,
-      lineWidth: 0.5,
-      lineDashArray: [5, 5],
-      activationMode: ActivationMode.singleTap,
-    );
-    // _zoomPanBehavior = ZoomPanBehavior(
-    //   enablePinching: true,
-    //   maximumZoomLevel: 0.05,
-    //   enableMouseWheelZooming: true,
-    //   enablePanning: true,
-    //   enableSelectionZooming: true,
-    //   selectionRectBorderColor: Colors.red,
-    //   zoomMode: ZoomMode.xy,
-    // );
-    _tooltipBehavior = TooltipBehavior(
-      enable: false,
-    );
     super.initState();
   }
 
@@ -121,29 +88,42 @@ class _ChartAreaState extends State<ChartArea> {
       return Expanded(
         child: SfCartesianChart(
           backgroundColor: Theme.of(context).canvasColor,
-          // margin: const EdgeInsets.only(top: 70, bottom: 5, right: 5, left: 5),
-          tooltipBehavior: _tooltipBehavior,
-          onTrackballPositionChanging: (trackballArgs) {
-            trackballController.updateTrackballPoints(
-              trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
-              trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
-              trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
-              trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
-              trackballArgs.chartPointInfo.color!,
-              trackballArgs.chartPointInfo.dataPointIndex!
-            );
-          },
-          trackballBehavior: _trackballBehavior,
+          trackballBehavior: TrackballBehavior(
+            tooltipDisplayMode: chartSettingController.isTooltipEnabled.value
+                ? TrackballDisplayMode.floatAllPoints
+                : TrackballDisplayMode.none,
+            enable: true,
+            lineWidth: 0.5,
+            lineDashArray: [5, 5],
+            activationMode: ActivationMode.singleTap,
+          ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePinching: true,
             maximumZoomLevel: 0.05,
             enableMouseWheelZooming: true,
-            enablePanning: chartSettingController.enablePan.value,
-            enableSelectionZooming: true,
+            enablePanning: chartSettingController.isPanEnabled.value,
+            enableSelectionZooming: false,
             selectionRectBorderColor: Colors.red,
             zoomMode: ZoomMode.x,
           ),
-          crosshairBehavior: _crosshairBehavior,
+          crosshairBehavior: CrosshairBehavior(
+            enable: true,
+            lineWidth: 0.5,
+            lineDashArray: [5, 5],
+            shouldAlwaysShow: true,
+            lineType: CrosshairLineType.horizontal,
+            activationMode: ActivationMode.singleTap,
+          ),
+          onTrackballPositionChanging: (trackballArgs) {
+            trackballController.updateTrackballPoints(
+                trackballArgs.chartPointInfo.chartPoint!.open!.toStringAsFixed(2),
+                trackballArgs.chartPointInfo.chartPoint!.high!.toStringAsFixed(2),
+                trackballArgs.chartPointInfo.chartPoint!.low!.toStringAsFixed(2),
+                trackballArgs.chartPointInfo.chartPoint!.close!.toStringAsFixed(2),
+                trackballArgs.chartPointInfo.color!,
+                trackballArgs.chartPointInfo.dataPointIndex!
+            );
+          },
           indicators: HelperFunctions.getIndicators(),
           enableSideBySideSeriesPlacement: false,
           series: [
@@ -186,6 +166,7 @@ class _ChartAreaState extends State<ChartArea> {
     }
     );
   }
+
   ChartAxis buildDateTimeCategoryAxis() {
     return DateTimeCategoryAxis(
       edgeLabelPlacement: EdgeLabelPlacement.shift,

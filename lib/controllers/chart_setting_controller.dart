@@ -14,13 +14,19 @@ enum CandleTimeFrame {
 }
 
 class ChartSettingController extends GetxController {
-  var enablePan = true.obs;
-  var enableZoom = true.obs;
+  var isPanEnabled = true.obs;
+  var isZoomEnabled = true.obs;
+  var isTooltipEnabled = false.obs;
   var candleType = CandleType.candle.obs;
   var selectedCandleTimeFrame = CandleTimeFrame.oneMinute.obs;
 
   switchPanMode(){
-    enablePan.value = !enablePan.value;
+    print("hello there");
+    isPanEnabled.value = !isPanEnabled.value;
+  }
+
+  switchTooltipMode(){
+    isTooltipEnabled.value = !isTooltipEnabled.value;
   }
 
   switchCandleType(){

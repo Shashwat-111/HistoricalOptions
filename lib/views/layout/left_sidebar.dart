@@ -32,7 +32,6 @@ class _LeftSidebarState extends State<LeftSidebar> {
         buildIconButton(),
         switchCandleTypeButton(),
         annotateButton(),
-        measureButton(),
         addTextButton(),
         showToolTipButton(),
       ],
@@ -47,16 +46,26 @@ class _LeftSidebarState extends State<LeftSidebar> {
             chartSettingController.switchPanMode();
           });
           },
-        icon: chartSettingController.enablePan.value
+        icon: chartSettingController.isPanEnabled.value
           ? const Icon(Icons.lock_open_sharp)
           : const Icon(Icons.lock_outline_sharp),);
   }
 
-  IconButton showToolTipButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.chat_bubble_outline_sharp), tooltip:"tooltip",);
+  Widget showToolTipButton() {
+    return IconButton(
+      onPressed: (){
+        setState(() {
+          chartSettingController.switchTooltipMode();
+        });
+      },
+      icon: chartSettingController.isTooltipEnabled.value
+          ? const Icon(Icons.chat_bubble_sharp)
+          : const Icon(Icons.chat_bubble_outline_sharp),
+      tooltip:"tooltip",
+    );
+  }
 
   IconButton addTextButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.title_outlined), tooltip:"Add Text",);
-
-  IconButton measureButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.straighten_outlined), tooltip:"measure",);
 
   IconButton annotateButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",);
 
