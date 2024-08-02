@@ -13,4 +13,8 @@ const double mobileWidth = 950;
 //Color highlightedColor = Colors.grey[200]!;
 //Color scaffoldBgColor = Colors.grey[700]!;
 
-const double initialZoomFactor = 0.80;
+const double initialZoomFactorForDesktop = 0.25;
+const double initialZoomFactorForMobile = 0.15;
+
+const int candleNumberForMobile = 500;
+const int candleNumberForDesktop = 1500;

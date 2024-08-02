@@ -1,8 +1,12 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../controllers/chart_setting_controller.dart';
 import '../controllers/indicator_controller.dart';
 import '../controllers/ohlc_data_controller.dart';
+import '../models/graph_data_class.dart';
+import 'constants.dart';
 
 abstract class HelperFunctions {
 
@@ -126,5 +130,21 @@ abstract class HelperFunctions {
     } else {
       return "-";
     }
+  }
+
+  ///Till lazy loading is implemented, this function is being used to
+  /// return the number of candles that any chart needs to display
+  /// based on the device mobile or desktop.
+  /// For mobile device 500 candles are displayed.
+  /// for desktop 1500 candles are displayed.
+  /// these defaults can be changed from the constants file.
+  static List<OhlcDatum> decreaseNumberOfCandles(BuildContext context){
+    OhlcDataController dataController = Get.put(OhlcDataController());
+    var temp = dataController.ohlcDataList.slices(
+        MediaQuery.of(context).size.width< mobileWidth
+            ? candleNumberForMobile
+            : candleNumberForDesktop
+    ).toList();
+    return temp[temp.length - 1];
   }
 }

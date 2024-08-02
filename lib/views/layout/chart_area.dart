@@ -73,7 +73,7 @@ class _ChartAreaState extends State<ChartArea> {
       }
       //huge number of candles are causing performance issue so,
       //using less number of candles till lazy loading is implemented
-      _initialData = decreaseNumberOfCandles();
+      _initialData = HelperFunctions.decreaseNumberOfCandles(context);
       return buildChartLayout2();
     });
   }
@@ -192,8 +192,11 @@ class _ChartAreaState extends State<ChartArea> {
       labelAlignment: LabelAlignment.center,
       initialZoomPosition: 1,
       interactiveTooltip: const InteractiveTooltip(),
-      // initialZoomFactor: 0.25,
-      initialZoomFactor: initialZoomFactor,
+      //initialZoomFactor: 0.25,
+      initialZoomFactor:
+      MediaQuery.of(context).size.width < mobileWidth
+          ? initialZoomFactorForMobile
+          : initialZoomFactorForDesktop,
       intervalType: DateTimeIntervalType.auto,
       dateFormat: DateFormat("d MMM ''yy HH:mm"),
       majorGridLines: const MajorGridLines(width: 1),
@@ -209,11 +212,4 @@ class _ChartAreaState extends State<ChartArea> {
       numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
     );
   }
-}
-
-
-List<OhlcDatum> decreaseNumberOfCandles(){
-  OhlcDataController dataController = Get.put(OhlcDataController());
-  var temp = dataController.ohlcDataList.slices(500).toList();
-  return temp[temp.length - 1];
 }
