@@ -141,7 +141,7 @@ class _ChartAreaState extends State<ChartArea> {
             enablePanning: chartSettingController.enablePan.value,
             enableSelectionZooming: true,
             selectionRectBorderColor: Colors.red,
-            zoomMode: ZoomMode.x,
+            zoomMode: ZoomMode.xy,
           ),
           crosshairBehavior: _crosshairBehavior,
           indicators: HelperFunctions.getIndicators(),
@@ -207,6 +207,8 @@ class _ChartAreaState extends State<ChartArea> {
     return NumericAxis(
       initialVisibleMaximum: HelperFunctions.getGlobalHigh(_initialData),
       initialVisibleMinimum: HelperFunctions.getGlobalLowest(_initialData),
+      maximum: HelperFunctions.getGlobalHigh(_initialData),
+      minimum: HelperFunctions.getGlobalLowest(_initialData),
       anchorRangeToVisiblePoints: true,
       opposedPosition: false,
       numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),

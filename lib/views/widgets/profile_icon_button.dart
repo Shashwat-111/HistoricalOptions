@@ -12,6 +12,7 @@ class ProfileIcon extends StatelessWidget {
       onTap: (){
         customPopup(
             context: context,
+            title: "Profile",
             child: Container(height: 300,width: 300,));
       },
       child: SizedBox(

@@ -13,6 +13,7 @@ class MyTextIconButton extends StatelessWidget {
         style: ButtonStyle(),
         onPressed: onPressed,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           //textBaseline: TextBaseline.alphabetic,
           children: [
