@@ -10,7 +10,7 @@ class ProfileIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        customPopup(
+        showCustomPopup(
             context: context,
             title: "Profile",
             child: Container(height: 300,width: 300,));

@@ -104,7 +104,9 @@ class _ChartAreaState extends State<ChartArea> {
             enablePanning: chartSettingController.isPanEnabled.value,
             enableSelectionZooming: false,
             selectionRectBorderColor: Colors.red,
-            zoomMode: ZoomMode.x,
+            zoomMode: chartSettingController.isPanInYEnabled.value
+                ? ZoomMode.xy
+                : ZoomMode.x,
           ),
           crosshairBehavior: CrosshairBehavior(
             enable: true,
@@ -149,7 +151,7 @@ class _ChartAreaState extends State<ChartArea> {
               bullColor: const Color.fromRGBO(8, 153, 129,1),
               //enableTooltip: true,
               name: "candle",
-              enableSolidCandles: true,
+              enableSolidCandles: chartSettingController.isCandleTypeSolid.value,
               animationDuration: 0.5,
               dataSource: currentlyDisplayedOHLC,
               xValueMapper: (OhlcDatum data, _) => data.datetime,

@@ -71,7 +71,7 @@ class _MyAppBarState extends State<MyAppBar> {
         icon: Icons.add,
         text: "New Chart",
         onPressed: () {
-          customPopup(
+          showCustomPopup(
               context: context,
               title: "New Chart",
               child: SizedBox(
@@ -251,7 +251,7 @@ class _MyAppBarState extends State<MyAppBar> {
         child: IconButton(
           icon: const Icon(Icons.notifications_none_sharp),
           onPressed: () {
-            customPopup(context: context, child: Container(), title: "Notification");
+            showCustomPopup(context: context, child: Container(), title: "Notification");
           },
         ),
       );
