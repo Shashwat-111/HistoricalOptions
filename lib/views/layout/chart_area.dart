@@ -212,7 +212,9 @@ class _ChartAreaState extends State<ChartArea> {
       minimum: HelperFunctions.getGlobalLowest(currentlyDisplayedOHLC),
       anchorRangeToVisiblePoints: true,
       opposedPosition: false,
-      numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),
+      numberFormat: NumberFormat.simpleCurrency(
+        decimalDigits: MediaQuery.of(context).size.width < mobileWidth ? 0 : 2,
+      ),
     );
   }
 }
