@@ -5,6 +5,7 @@ import "package:fno_view/utils/custom_popup_function.dart";
 import "package:fno_view/views/responsive/responsive.dart";
 import "package:get/get.dart";
 import "../../controllers/indicator_controller.dart";
+import "../../utils/custom_snackbar_function.dart";
 import "../widgets/indicator_dialog_box.dart";
 import "../widgets/custom_dropdown_button.dart";
 import "../widgets/my_text_icon_button.dart";
@@ -240,16 +241,7 @@ class _MyAppBarState extends State<MyAppBar> {
       icon: Icons.search_rounded,
       text: "Bank Nifty",
       onPressed: () {
-        //todo display this snackbar on right top like in web
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            margin: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.8,
-              bottom: MediaQuery.of(context).size.height * 0.9,
-              right: 10,
-            ),
-            behavior: SnackBarBehavior.floating,
-            dismissDirection: DismissDirection.horizontal,
-            content: const Text("Only BankNifty Data Currently Available")));
+        showCustomSnackBar(context: context, text: "Only BankNifty Data Currently Available");
       },
     );
   }
