@@ -7,8 +7,8 @@ showCustomPopup({required BuildContext context, required Widget child, required 
         alignment: Alignment.center,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
         title: Text(title),
-        titlePadding: EdgeInsets.fromLTRB(8, 8, 0, 0),
-        titleTextStyle: const TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),
+        titlePadding: const EdgeInsets.fromLTRB(8, 8, 0, 0),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
