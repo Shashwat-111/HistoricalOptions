@@ -29,7 +29,8 @@ class _ChartAreaState extends State<ChartArea> {
   // late ZoomPanBehavior _zoomPanBehavior;
   late CrosshairBehavior _crosshairBehavior;
   late TooltipBehavior _tooltipBehavior;
-  late List<OhlcDatum> _initialData;
+  late List<OhlcDatum> currentlyDisplayedOHLC;
+  ChartSeriesController? seriesController;
 
   @override
   void initState() {
@@ -73,7 +74,7 @@ class _ChartAreaState extends State<ChartArea> {
       }
       //huge number of candles are causing performance issue so,
       //using less number of candles till lazy loading is implemented
-      _initialData = HelperFunctions.decreaseNumberOfCandles(context);
+      currentlyDisplayedOHLC = HelperFunctions.decreaseNumberOfCandles(context);
       return buildChartLayout2();
     });
   }
@@ -96,7 +97,7 @@ class _ChartAreaState extends State<ChartArea> {
         mobileBody: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            OhlcValueTextColumn(),
+            OhlcValueTextColumn(currentlyDisplayedOHLC: currentlyDisplayedOHLC),
           ],
         ),
 
@@ -109,7 +110,7 @@ class _ChartAreaState extends State<ChartArea> {
                     "${dataController.currentStrike}",
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             const Spacer(),
-            OhlcValueTextColumn(),
+            OhlcValueTextColumn(currentlyDisplayedOHLC: currentlyDisplayedOHLC),
           ],
         ),
       )
@@ -141,7 +142,7 @@ class _ChartAreaState extends State<ChartArea> {
             enablePanning: chartSettingController.enablePan.value,
             enableSelectionZooming: true,
             selectionRectBorderColor: Colors.red,
-            zoomMode: ZoomMode.xy,
+            zoomMode: ZoomMode.x,
           ),
           crosshairBehavior: _crosshairBehavior,
           indicators: HelperFunctions.getIndicators(),
@@ -154,8 +155,9 @@ class _ChartAreaState extends State<ChartArea> {
               bullColor: const Color.fromRGBO(8, 153, 129,1),
               //enableTooltip: true,
               name: "candle",
+
               animationDuration: 0.5,
-              dataSource: _initialData,
+              dataSource: currentlyDisplayedOHLC,
               xValueMapper: (OhlcDatum data, _) => data.datetime,
               lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
               highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
@@ -170,7 +172,7 @@ class _ChartAreaState extends State<ChartArea> {
               name: "candle",
               enableSolidCandles: true,
               animationDuration: 0.5,
-              dataSource: _initialData,
+              dataSource: currentlyDisplayedOHLC,
               xValueMapper: (OhlcDatum data, _) => data.datetime,
               lowValueMapper: (OhlcDatum data, _) => double.parse(data.low),
               highValueMapper: (OhlcDatum data, _) => double.parse(data.high),
@@ -205,10 +207,10 @@ class _ChartAreaState extends State<ChartArea> {
 
   ChartAxis buildNumericAxis() {
     return NumericAxis(
-      initialVisibleMaximum: HelperFunctions.getGlobalHigh(_initialData),
-      initialVisibleMinimum: HelperFunctions.getGlobalLowest(_initialData),
-      maximum: HelperFunctions.getGlobalHigh(_initialData),
-      minimum: HelperFunctions.getGlobalLowest(_initialData),
+      initialVisibleMaximum: HelperFunctions.getGlobalHigh(currentlyDisplayedOHLC),
+      initialVisibleMinimum: HelperFunctions.getGlobalLowest(currentlyDisplayedOHLC),
+      maximum: HelperFunctions.getGlobalHigh(currentlyDisplayedOHLC),
+      minimum: HelperFunctions.getGlobalLowest(currentlyDisplayedOHLC),
       anchorRangeToVisiblePoints: true,
       opposedPosition: false,
       numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0),

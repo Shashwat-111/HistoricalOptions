@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fno_view/models/graph_data_class.dart';
 import 'package:fno_view/utils/helper_functions.dart';
 import 'package:get/get.dart';
 import '../../controllers/trackball_controller.dart';
 
 class OhlcValueTextColumn extends StatelessWidget {
-  OhlcValueTextColumn({super.key});
+  OhlcValueTextColumn({super.key, required this.currentlyDisplayedOHLC});
   final TrackballController trackballController = Get.put(TrackballController());
+  final List<OhlcDatum> currentlyDisplayedOHLC;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,9 @@ class OhlcValueTextColumn extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text("Change: "),
-                Text("${HelperFunctions.getPercentageChange(trackballController.trackballIndex.value)} %  ", style:TextStyle(color: trackballController.trackballColor.value)),
+                Text("${HelperFunctions.getPercentageChange(trackballController.trackballIndex.value,currentlyDisplayedOHLC)} %  ", style:TextStyle(color: trackballController.trackballColor.value)),
                 const SizedBox(width: 8,),
-                Text("Vol : ${HelperFunctions.getVolumeFromIndex(trackballController.trackballIndex.value)}"),
+                Text("Vol : ${HelperFunctions.getVolumeFromIndex(trackballController.trackballIndex.value,currentlyDisplayedOHLC)}"),
               ],
             )
           ],

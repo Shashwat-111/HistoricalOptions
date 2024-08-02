@@ -108,25 +108,21 @@ abstract class HelperFunctions {
 
   ///takes in a index value, and return the value of volume
   ///associated with that index in the current ohlcDataLIst
-  static int getVolumeFromIndex(int index){
-    OhlcDataController dataController = Get.put(OhlcDataController());
-    return dataController.ohlcDataList[index].volume;
+  static int getVolumeFromIndex(int index, List<OhlcDatum> currentlyDisplayedOHLC){
+    return currentlyDisplayedOHLC[index].volume;
   }
 
   ///takes in the index of the candle currently being hovered on,
   ///and returns a percent change value, compared form the previous candle.
   ///if the index is zero, it returns a "-"
-  static String getPercentageChange(int currentIndex){
-    OhlcDataController dataController = Get.put(OhlcDataController());
+  static String getPercentageChange(int currentIndex, currentlyDisplayedOHLC){
     if(currentIndex!=0){
-      var previousClose =double.parse(dataController.ohlcDataList[currentIndex-1].close);
-      var currentClose =double.parse(dataController.ohlcDataList[currentIndex].close);
-      var percentChange = (((previousClose-currentClose)/previousClose)*100).toPrecision(2);
-      if (percentChange<0) {
-        return percentChange.toStringAsFixed(2);
-      } else {
-        return "+${percentChange.toStringAsFixed(2)}";
-      }
+      var previousClose =double.parse(currentlyDisplayedOHLC[currentIndex-1].close);
+      var currentClose =double.parse(currentlyDisplayedOHLC[currentIndex].close);
+      var percentChange = (((currentClose-previousClose)/previousClose)*100).abs();
+      return previousClose>currentClose
+          ? "-${percentChange.toStringAsFixed(2)}"
+          : "+${percentChange.toStringAsFixed(2)}";
     } else {
       return "-";
     }
