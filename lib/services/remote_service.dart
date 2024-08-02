@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:fno_view/models/expiry_data_class.dart';
 import 'package:fno_view/models/graph_data_class.dart';
 import 'package:fno_view/models/strikes_list_class.dart';
@@ -10,7 +11,7 @@ class RemoteService {
   Future<OptionsData?> getFullData(String chartDetails ) async {
     var client = http.Client();
     var uri = Uri.parse('https://hardy-antonym-424411-h8.el.r.appspot.com/api/price?$chartDetails');
-    print("https://hardy-antonym-424411-h8.el.r.appspot.com/api/price?$chartDetails");
+    debugPrint("Request sent to : https://hardy-antonym-424411-h8.el.r.appspot.com/api/price?$chartDetails");
     var response = await client.get(uri);
     //print(response.body);
     if(response.statusCode == 200)

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
 import 'package:fno_view/utils/helper_functions.dart';
@@ -136,7 +135,7 @@ class _ChartAreaState extends State<ChartArea> {
           },
           trackballBehavior: _trackballBehavior,
           zoomPanBehavior: ZoomPanBehavior(
-            //enablePinching: true,
+            enablePinching: true,
             maximumZoomLevel: 0.05,
             enableMouseWheelZooming: true,
             enablePanning: chartSettingController.enablePan.value,

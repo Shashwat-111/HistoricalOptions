@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fno_view/utils/theme.dart';
 
 class MyTextIconButton extends StatelessWidget {
   final IconData icon;
@@ -10,7 +9,6 @@ class MyTextIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        style: ButtonStyle(),
         onPressed: onPressed,
         child: Row(
           mainAxisSize: MainAxisSize.min,

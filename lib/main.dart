@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fno_view/utils/constants.dart';
-import 'package:fno_view/utils/theme.dart';
 import 'package:fno_view/views/responsive/desktop_layout.dart';
 import 'package:fno_view/views/responsive/mobile_layout.dart';
 import 'package:fno_view/views/responsive/responsive.dart';

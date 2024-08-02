@@ -47,7 +47,7 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
             timeFrameWithFunction[selectedValue]!();
           });
         },
-        icon: Text(selectedValue,style: TextStyle(fontWeight: FontWeight.w500),)
+        icon: Text(selectedValue,style: const TextStyle(fontWeight: FontWeight.w900),)
     );
   }
 
