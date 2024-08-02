@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/utils/custom_snackbar_function.dart';
 import '../widgets/theme_switch_button.dart';
 
 class RightSidebar extends StatefulWidget {
@@ -14,12 +15,18 @@ class _RightSidebarState extends State<RightSidebar> {
     return Column(
       children: [
         ThemeSwitchButton(),
-        IconButton(onPressed: (){}, icon: const Icon(Icons.color_lens_outlined)),
+        IconButton(onPressed: (){
+          showCustomSnackBar(context: context, text: "Custom Color theming coming soon!");
+        }, icon: const Icon(Icons.color_lens_outlined)),
         RotatedBox(
           quarterTurns: 1,
-            child: IconButton(onPressed: (){}, icon: const Icon(Icons.splitscreen_sharp))),
+            child: IconButton(onPressed: (){
+              showCustomSnackBar(context: context, text: "chart comparison view currently unavailable");
+            }, icon: const Icon(Icons.splitscreen_sharp))),
         const Spacer(),
-        IconButton(onPressed: (){}, icon: const Icon(Icons.info_outlined))
+        IconButton(onPressed: (){
+          
+        }, icon: const Icon(Icons.info_outlined))
       ],
     );
   }
