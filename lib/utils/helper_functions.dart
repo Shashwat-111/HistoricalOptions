@@ -92,7 +92,7 @@ abstract class HelperFunctions {
 
   ///takes in a OHLC data list and gives the lowest value that list ever reached.
   ///use to define the max and min value of y axis to plot the graph
-  ///it returns +20% value of the lowest to make sure there is a padding at the bottom
+  ///it returns -20% value of the lowest to make sure there is a padding at the bottom
   static double getGlobalLowest(List list){
     var tempList = list;
     int lowestValuesIndex = 0;
@@ -103,7 +103,7 @@ abstract class HelperFunctions {
       }
     }
     //increase the returned value by 20%, for padding
-    return double.parse(tempList[lowestValuesIndex].low)*1.2;
+    return double.parse(tempList[lowestValuesIndex].low)*0.80;
   }
 
   ///takes in a index value, and return the value of volume
