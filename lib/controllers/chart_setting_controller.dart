@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../models/graph_data_class.dart';
+import '../utils/helper_functions.dart';
 import 'ohlc_data_controller.dart';
 
 enum CandleType {
@@ -15,13 +16,21 @@ enum CandleTimeFrame {
 
 class ChartSettingController extends GetxController {
   var isPanEnabled = true.obs;
-  var isPanInYEnabled = false.obs;
+  var isPanInYEnabled = true.obs;
   var isZoomEnabled = true.obs;
   var isTooltipEnabled = false.obs;
   var isSelectionZoomingEnabled = false.obs;
   var candleType = CandleType.candle.obs;
   var isCandleTypeSolid = true.obs;
   var selectedCandleTimeFrame = CandleTimeFrame.oneMinute.obs;
+
+
+  @override
+  void onInit() {
+    print(!HelperFunctions.isMobileView());
+    isPanInYEnabled.value = !HelperFunctions.isMobileView();
+    super.onInit();
+  }
 
   switchPanMode(){
     isPanEnabled.value = !isPanEnabled.value;
