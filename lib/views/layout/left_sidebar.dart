@@ -67,5 +67,17 @@ class _LeftSidebarState extends State<LeftSidebar> {
 
   IconButton annotateButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",);
 
-  IconButton switchCandleTypeButton() => IconButton(onPressed: (){chartSettingController.switchCandleType();}, icon: const Icon(Icons.candlestick_chart_outlined),tooltip:"Candle type");
+  Widget switchCandleTypeButton() {
+    return Obx(
+        ()=> IconButton(
+          onPressed: (){
+            chartSettingController.switchCandleType();
+            },
+          icon: chartSettingController.candleType.value == CandleType.candle
+              ? const Icon(Icons.candlestick_chart_outlined)
+              : const Icon(Icons.bar_chart_rounded),
+          tooltip:"Candle type"
+      ),
+    );
+  }
 }

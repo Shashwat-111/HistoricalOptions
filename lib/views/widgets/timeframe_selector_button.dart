@@ -47,7 +47,8 @@ class _TimeFrameSelectorButtonState extends State<TimeFrameSelectorButton> {
             timeFrameWithFunction[selectedValue]!();
           });
         },
-        icon: Text(selectedValue,style: const TextStyle(fontWeight: FontWeight.w900),)
+        icon: Text(selectedValue,style: const TextStyle(fontWeight: FontWeight.w700),),
+      tooltip: "Candle timeframe",
     );
   }
 
