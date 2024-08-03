@@ -10,6 +10,15 @@ import 'constants.dart';
 
 abstract class HelperFunctions {
 
+  ///returns true if the current width of screen is
+  ///less than the defined [mobileWidth]
+  static bool isMobileView(){
+    //gets the width of the current screen without needing any context
+    return (WidgetsBinding
+        .instance.platformDispatcher.views.first.physicalSize.width /
+        WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio)<mobileWidth;
+  }
+
   ///gets the enum value of the selected timeFrame
   ///and gives back the time value in int
   static convertTimeFrameToMinutes(CandleTimeFrame timeFrame) {
