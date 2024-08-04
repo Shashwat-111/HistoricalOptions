@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import '../models/graph_data_class.dart';
 import '../services/remote_service.dart';
 
+
+//controls the state of current displayed chart.
 class OhlcDataController extends GetxController {
 
   //Dropdown selections by user. Initially set to null.

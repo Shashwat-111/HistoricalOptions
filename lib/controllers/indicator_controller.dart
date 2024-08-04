@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+//for managing available and currently selected technical indicators
 class IndicatorController extends GetxController {
 
   //generates a list of 12 bool values, indicating
