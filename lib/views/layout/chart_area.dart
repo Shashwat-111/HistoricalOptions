@@ -102,7 +102,7 @@ class _ChartAreaState extends State<ChartArea> {
             maximumZoomLevel: 0.05,
             enableMouseWheelZooming: true,
             enablePanning: chartSettingController.isPanEnabled.value,
-            enableSelectionZooming: false,
+            enableSelectionZooming: chartSettingController.isSelectionZoomingEnabled.value,
             selectionRectBorderColor: Colors.red,
             zoomMode: chartSettingController.isPanInYEnabled.value
                 ? ZoomMode.xy
