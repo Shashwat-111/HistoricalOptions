@@ -32,7 +32,7 @@ class _LeftSidebarState extends State<LeftSidebar> {
           const TimeFrameSelectorButton(),
         buildIconButton(),
         switchCandleTypeButton(),
-        annotateButton(),
+        //annotateButton(),
         addTextButton(),
         showToolTipButton(),
       ],
