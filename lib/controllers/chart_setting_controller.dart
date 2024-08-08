@@ -28,7 +28,6 @@ class ChartSettingController extends GetxController {
 
   @override
   void onInit() {
-    print(!HelperFunctions.isMobileView());
     isPanInYEnabled.value = !HelperFunctions.isMobileView();
     super.onInit();
   }

@@ -201,10 +201,6 @@ class _ChartAreaState extends State<ChartArea> {
                 chartSettingController.switchAnnotation();
               }
             });
-            print('X point: ${chartpoint.x}');
-            print('Y point: ${chartpoint.y}');
-            print('X point new: ${chartpoint.x.toString()}');
-            print('Y point new: ${chartpoint.y!.toDouble()}');
           },
           primaryXAxis: buildDateTimeCategoryAxis(),
           primaryYAxis: buildNumericAxis(),

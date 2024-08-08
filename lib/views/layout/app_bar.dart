@@ -92,7 +92,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
   Widget refreshButton() {
     return Obx(() {
-      debugPrint(dataController.selectedExpiry.value);
+      debugPrint("Currently Selected Expiry : ${dataController.selectedExpiry.value}");
       return MyTextIconButton(
           icon: Icons.refresh,
           text: "Refresh",
@@ -130,7 +130,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
   Widget expiryDropdown() {
     return Obx(() {
-      debugPrint("diff ${dataController.expiryDateList}");
+      debugPrint("Available expiry dates : ${dataController.expiryDateList}");
       return SizedBox(
         width: 150,
         child: CustomDropdownButton(
@@ -194,7 +194,7 @@ class _MyAppBarState extends State<MyAppBar> {
     return SizedBox(
       width: 150,
       child: Obx(() {
-        debugPrint("diff ${dataController.strikePriceList}");
+        debugPrint("Available Strike Price : ${dataController.strikePriceList}");
         // Ensure that the selected strike is in the list
         if (dataController.selectedStrike.value != null &&
             !dataController.strikePriceList
