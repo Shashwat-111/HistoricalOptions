@@ -1,37 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:fno_view/controllers/theme_controller.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../views/widgets/text_annotation_widget.dart';
 
 class AnnotationsController extends GetxController {
+
+  //maintains the current list of annotations added
   var annotationList = <CartesianChartAnnotation>[].obs;
-  var annotationText = "default".obs;
 
-  ThemeController themeController = Get.put(ThemeController());
+  //A temporary value to store the text that user adds in the "add annotation" text field
+  var annotationText = "".obs;
 
+  //called after user press "ok" in the add annotation text box
   setAnnotationText(String text){
-    print("setting annotation text to $text");
     annotationText.value = text;
-    print("new setting annotation text to ${annotationText.value}");
   }
 
+  //returns the new list of annotated values, including the one recently added.
   List<CartesianChartAnnotation> annotate(
-      {required String x, required double y, required String text}) {
-    var newAnnotation = CartesianChartAnnotation(
-      widget: Text(
-        text,
-        style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color:
-                themeController.isDarkMode.value ? Colors.white : Colors.black,
-            fontSize: 18
-        ),
-      ),
-      coordinateUnit: CoordinateUnit.point,
-      x: DateTime.parse(x),
-      y: y,
-    );
-    annotationList.add(newAnnotation);
+      {required String xOffset, required double yOffset, required String text}) {
+    annotationList.add(getAnnotation(text,xOffset,yOffset));
     return annotationList;
   }
 }

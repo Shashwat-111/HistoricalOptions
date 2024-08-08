@@ -77,8 +77,15 @@ class _LeftSidebarState extends State<LeftSidebar> {
                 context: context,
                 builder: (context)=> AlertDialog(
                   title: const Text("Add Annotation"),
-                  content: TextField(
-                    controller: annotationTextController,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("Enter text, then tap the chart to place it."),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: annotationTextController,
+                      ),
+                    ],
                   ),
                   actions: [
                     TextButton(
