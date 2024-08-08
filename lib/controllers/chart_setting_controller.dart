@@ -23,6 +23,7 @@ class ChartSettingController extends GetxController {
   var candleType = CandleType.candle.obs;
   var isCandleTypeSolid = true.obs;
   var selectedCandleTimeFrame = CandleTimeFrame.oneMinute.obs;
+  var isAnnotationEnabled = false.obs;
 
 
   @override
@@ -34,6 +35,10 @@ class ChartSettingController extends GetxController {
 
   switchPanMode(){
     isPanEnabled.value = !isPanEnabled.value;
+  }
+
+  switchAnnotation(){
+    isAnnotationEnabled.value = !isAnnotationEnabled.value;
   }
 
   switchYPanMode(){

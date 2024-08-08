@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fno_view/controllers/annotations_controller.dart';
 import 'package:fno_view/controllers/chart_setting_controller.dart';
 import 'package:fno_view/utils/constants.dart';
 import 'package:fno_view/views/widgets/settings_icon_button.dart';
@@ -16,6 +17,8 @@ class LeftSidebar extends StatefulWidget {
 
 class _LeftSidebarState extends State<LeftSidebar> {
   ChartSettingController chartSettingController = Get.put(ChartSettingController());
+  TextEditingController annotationTextController = TextEditingController();
+  AnnotationsController annotationsController = Get.put(AnnotationsController());
   @override
   Widget build(BuildContext context) {
     bool isMobile = MediaQuery.of(context).size.width<mobileWidth;
@@ -63,7 +66,45 @@ class _LeftSidebarState extends State<LeftSidebar> {
     );
   }
 
-  IconButton addTextButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.title_outlined), tooltip:"Add Text",);
+  Widget addTextButton() {
+    return Obx(
+      ()=> IconButton(
+        isSelected: chartSettingController.isAnnotationEnabled.value,
+        onPressed: (){
+          chartSettingController.switchAnnotation();
+          if(chartSettingController.isAnnotationEnabled.value){
+            showDialog(
+                context: context,
+                builder: (context)=> AlertDialog(
+                  title: const Text("Add Annotation"),
+                  content: TextField(
+                    controller: annotationTextController,
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: (){
+                          chartSettingController.switchAnnotation();
+                          Navigator.pop(context);
+                        },
+                        child: const Text("CANCEL")
+                    ),
+                    TextButton(
+                        onPressed: (){
+                          annotationsController.setAnnotationText(annotationTextController.text);
+                          Navigator.pop(context);
+                        },
+                        child: const Text("ADD")
+                    ),
+                  ],
+                ));
+          }
+        },
+        icon: const Icon(Icons.title_outlined),
+        selectedIcon: Container(color : Colors.grey , child: const Icon(Icons.title_outlined)),
+        tooltip:"Add Text",
+      ),
+    );
+  }
 
   IconButton annotateButton() => IconButton(onPressed: (){}, icon: const Icon(Icons.mode_edit_outlined), tooltip:"annotate",);
 
