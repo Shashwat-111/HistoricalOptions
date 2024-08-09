@@ -2,24 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/indicator_controller.dart';
 
-class IndicatorDialogBox extends StatefulWidget {
-  final Widget child;
-  const IndicatorDialogBox({super.key, required this.child});
-
-  @override
-  State<IndicatorDialogBox> createState() => _IndicatorDialogBoxState();
-}
-
-class _IndicatorDialogBoxState extends State<IndicatorDialogBox> {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-        child: SizedBox(
-          width: 500,
-          child: widget.child));
-  }
-}
-
 class IndicatorSelectorArea extends StatelessWidget {
   IndicatorSelectorArea({
     super.key,
@@ -31,21 +13,19 @@ class IndicatorSelectorArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 460,
+      width: 350,
+      height: 250,
       child: ListView.builder(
           itemCount: indicators.length,
           itemBuilder: (_,n){
-            return Padding(
-              padding: const EdgeInsets.all(0),
-              child: Obx(
-                    ()=> CheckboxListTile(
-                    title: Text(indicators[n]),
-                    value: indicatorController.selectedIndicators[n],
-                    onChanged: (bool? isSelected){
-                      //print("index $n bool value: $isSelected");
-                      indicatorController.updateSelectedIndicator(n, isSelected);
-                    }),
-              ),
+            return Obx(
+                  ()=> CheckboxListTile(
+                  title: Text(indicators[n]),
+                  value: indicatorController.selectedIndicators[n],
+                  onChanged: (bool? isSelected){
+                    //print("index $n bool value: $isSelected");
+                    indicatorController.updateSelectedIndicator(n, isSelected);
+                  }),
             );
           }),
     );

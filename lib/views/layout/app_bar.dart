@@ -260,40 +260,48 @@ class _MyAppBarState extends State<MyAppBar> {
       icon: Icons.bar_chart_sharp,
       text: "Indicators",
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return IndicatorDialogBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Text(
-                        "Indicators",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    IndicatorSelectorArea(indicators: supportedIndicatorList),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("ok")),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            });
+        showCustomPopup(
+          title: "Select Indicators",
+          context: context,
+          child: IndicatorSelectorArea(indicators: supportedIndicatorList),
+        );
       });
 }
+//
+// {
+// showDialog(
+// context: context,
+// builder: (context) {
+// return IndicatorDialogBox(
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.start,
+// mainAxisSize: MainAxisSize.min,
+// children: [
+// const Padding(
+// padding: EdgeInsets.all(12),
+// child: Text(
+// "Indicators",
+// style: TextStyle(
+// fontWeight: FontWeight.bold, fontSize: 24),
+// ),
+// ),
+// const SizedBox(
+// height: 20,
+// ),
+// IndicatorSelectorArea(indicators: supportedIndicatorList),
+// Align(
+// alignment: Alignment.bottomRight,
+// child: Padding(
+// padding: const EdgeInsets.all(8.0),
+// child: TextButton(
+// onPressed: () {
+// Navigator.pop(context);
+// },
+// child: const Text("ok")),
+// ),
+// )
+// ],
+// ),
+// );
+// });
+// }
