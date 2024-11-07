@@ -40,6 +40,7 @@ class _ChartAreaState extends State<ChartArea> {
       if (dataController.isLoading.value == true) {
         return const Center(child: CircularProgressIndicator());
       }
+      //todo implement lazy loading
       //huge number of candles are causing performance issue so,
       //using less number of candles till lazy loading is implemented
       currentlyDisplayedOHLC = HelperFunctions.decreaseNumberOfCandles(context);

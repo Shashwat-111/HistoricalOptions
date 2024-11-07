@@ -58,10 +58,10 @@ class OhlcDataController extends GetxController {
     var response = await RemoteService().getStrikePriceList(expiry, right);
     if(expiry=="29-Jul-2021" && right=="put") {
       strikePriceList.value =
-          response.map((e) => e.strikes.toString()).toList().sublist(0, 4);
+          response.map((e) => e.strikes.toString()).toList();
     } else {
       strikePriceList.value =
-          response.map((e) => e.strikes.toString()).toList().sublist(0, 5);}
+          response.map((e) => e.strikes.toString()).toList();}
     isStrikeLoading.value = false;
   }
 
@@ -69,7 +69,7 @@ class OhlcDataController extends GetxController {
   // sends a get request to fetch the data from backend
   void fetchOhlcDataFromNetwork({required String expiry, required String right, required String strike}) async {
     isLoading.value = true;
-    var response = await RemoteService().getFullData("expiry=$expiry&right1=$right&strike=$strike");
+    var response = await RemoteService().getFullData("expiry=$expiry&right=$right&strikeprice=$strike");
     if (response!=null)
     {
       ohlcDataList.value = response.ohlcData;
@@ -91,7 +91,7 @@ class OhlcDataController extends GetxController {
   getExpiryDatesList() async {
     var response = await RemoteService().getExpiryData();
     //todo remove this sublist when data of all expiry is available
-    expiryDateList.value = response.map((e) => e.expiryDates).toList().sublist(0,2);
+    expiryDateList.value = response.map((e) => e.expiryDates).toList();
   }
 
 }

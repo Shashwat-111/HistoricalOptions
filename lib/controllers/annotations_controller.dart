@@ -21,4 +21,10 @@ class AnnotationsController extends GetxController {
     annotationList.add(getAnnotation(text,xOffset,yOffset));
     return annotationList;
   }
+
+  //a function to clear all annotation. Used when chat is reloaded/ new chat is fetched.
+  clearAnnotations(){
+    annotationList.clear();
+    annotationText.value = "";
+  }
 }

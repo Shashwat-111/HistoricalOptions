@@ -5,7 +5,8 @@ import 'package:fno_view/models/strikes_list_class.dart';
 import 'package:http/http.dart' as http;
 
 class RemoteService {
-  final _baseUrl = 'https://hardy-antonym-424411-h8.el.r.appspot.com/api';
+  //final _baseUrl = 'https://hardy-antonym-424411-h8.el.r.appspot.com/api';
+  final _baseUrl = 'https://98ad9677-66cd-48a3-8373-8fd7a8abf20d.mock.pstmn.io';
 
   // Generic method for GET requests
   Future<http.Response?> _getRequest(String endpoint) async {
@@ -25,7 +26,7 @@ class RemoteService {
   }
 
   Future<OptionsData?> getFullData(String chartDetails) async {
-    var response = await _getRequest('price?$chartDetails');
+    var response = await _getRequest('fulldata?$chartDetails');
     if (response != null) {
       return optionsDataFromJson(response.body);
     }
@@ -41,7 +42,7 @@ class RemoteService {
   }
 
   Future<List<StrikesData>> getStrikePriceList(String expiry, String right) async {
-    var response = await _getRequest('strikes?expiry=$expiry&right0=$right');
+    var response = await _getRequest('strikePriceList?expiry=$expiry&right=$right');
     if (response != null) {
       return strikesDataFromJson(response.body);
     }

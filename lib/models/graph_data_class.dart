@@ -34,7 +34,7 @@ class OptionsData {
         productType: json["product_type"],
         right: json["right"],
         stockCode: json["stock_code"],
-        strikePrice: json["strike_price"],
+        strikePrice: int.parse(json["strike_price"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -76,8 +76,8 @@ class OhlcDatum {
         high: json["high"],
         low: json["low"],
         open: json["open"],
-        openInterest: json["open_interest"],
-        volume: json["volume"],
+        openInterest: int.parse(json["open_interest"]),
+        volume: int.parse(json["volume"]),
     );
 
     Map<String, dynamic> toJson() => {

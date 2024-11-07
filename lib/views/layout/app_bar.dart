@@ -4,6 +4,7 @@ import "package:fno_view/utils/constants.dart";
 import "package:fno_view/utils/custom_popup_function.dart";
 import "package:fno_view/views/responsive/responsive.dart";
 import "package:get/get.dart";
+import "../../controllers/annotations_controller.dart";
 import "../../controllers/indicator_controller.dart";
 import "../../utils/custom_snackbar_function.dart";
 import "../widgets/indicator_dialog_box.dart";
@@ -20,6 +21,7 @@ class MyAppBar extends StatefulWidget {
 
 class _MyAppBarState extends State<MyAppBar> {
   OhlcDataController dataController = Get.put(OhlcDataController());
+  AnnotationsController annotationsController = Get.put(AnnotationsController());
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +43,8 @@ class _MyAppBarState extends State<MyAppBar> {
           verticalDivider(),
           const SizedBox(width: 10),
           indicatorsButton(),
-          const Spacer(),
-          notificationButton()
+          // const Spacer(),
+          // notificationButton()
         ],
       ),
       mobileBody: SizedBox(
@@ -97,6 +99,15 @@ class _MyAppBarState extends State<MyAppBar> {
           icon: Icons.refresh,
           text: "Refresh",
           onPressed: () {
+            if(dataController.selectedExpiry.value == null){
+              showCustomSnackBar(context: context, text: "Select a Expiry First");
+            }
+            else if(dataController.selectedRight.value == null){
+              showCustomSnackBar(context: context, text: "Select a Right First");
+            }
+            else if(dataController.selectedStrike.value == null){
+              showCustomSnackBar(context: context, text: "Select a Strike First");
+            }
             if (dataController.selectedExpiry.value != null &&
                 dataController.selectedRight.value != null &&
                 dataController.selectedStrike.value != null) {
@@ -104,9 +115,9 @@ class _MyAppBarState extends State<MyAppBar> {
                   expiry: dataController.selectedExpiry.value!,
                   right: dataController.selectedRight.value!,
                   strike: dataController.selectedStrike.value!);
-            } else {
-              //todo: show a snackbar or error message.
-              debugPrint("can't refresh: one of the values is null");
+
+              //on a successful refresh, clear annotations of previous chart.
+              annotationsController.clearAnnotations();
             }
           });
       // return IconButton(
@@ -202,25 +213,35 @@ class _MyAppBarState extends State<MyAppBar> {
           dataController.selectedStrike.value = null;
         }
 
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            //display a circular progress indicator till strike price is fetched.
-            Visibility(
-                visible: dataController.isStrikeLoading.value,
-                child: const SizedBox(
-                    width: 15, height: 15, child: CircularProgressIndicator())),
-            CustomDropdownButton(
-              initialMenuItems: dataController.strikePriceList,
-              labelText: "Select Strike",
-              hintText: "Select Strike",
-              width: 150,
-              value: dataController.selectedStrike.value, // Pass the value here
-              onChanged: (strike) {
-                dataController.selectedStrike(strike);
-              },
-            )
-          ],
+        return GestureDetector(
+          onTap: (){
+            if(dataController.selectedExpiry.value == null){
+              showCustomSnackBar(context: context, text: "Select a Expiry First");
+            }
+            if(dataController.selectedExpiry.value != null && dataController.selectedRight.value == null){
+              showCustomSnackBar(context: context, text: "Select Right First");
+            }
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              //display a circular progress indicator till strike price is fetched.
+              Visibility(
+                  visible: dataController.isStrikeLoading.value,
+                  child: const SizedBox(
+                      width: 15, height: 15, child: CircularProgressIndicator())),
+              CustomDropdownButton(
+                initialMenuItems: dataController.strikePriceList,
+                labelText: "Select Strike",
+                hintText: "Select Strike",
+                width: 150,
+                value: dataController.selectedStrike.value, // Pass the value here
+                onChanged: (strike) {
+                  dataController.selectedStrike(strike);
+                },
+              )
+            ],
+          ),
         );
       }),
     );
